@@ -28,7 +28,10 @@
             android:name=".activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.ListActivity"
+            android:name=".activity.AllActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FaveActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SadActivity"

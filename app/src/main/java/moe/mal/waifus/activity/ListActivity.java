@@ -18,7 +18,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ListActivity extends SidebarActivity {
+public abstract class ListActivity extends SidebarActivity {
 
     WaifuAPI waifuAPI;
     String listName;

@@ -21,6 +21,7 @@ public abstract class GenericActivity extends AppCompatActivity {
 
     protected void showScreen(Class cls, String arg_key, String arg_value) {
         Intent in = new Intent(c, cls);
+        in.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         in.putExtra(arg_key, arg_value);
         startActivity(in);
     }
