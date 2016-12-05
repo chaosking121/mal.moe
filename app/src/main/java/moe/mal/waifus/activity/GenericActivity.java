@@ -1,4 +1,4 @@
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,6 +1,7 @@
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,9 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import moe.mal.waifus.Ougi;
+import moe.mal.waifus.R;
+
 public class MainActivity extends GenericActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,12 @@ public class MainActivity extends GenericActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Ougi.getInstance().setMainActivity(this);
+
+        Ougi.getInstance().setCredentials(
+                PreferenceManager.getDefaultSharedPreferences(this).getString("username", "user"),
+                PreferenceManager.getDefaultSharedPreferences(this).getString("password", "pass"));
     }
 
     @Override
@@ -55,7 +64,7 @@ public class MainActivity extends GenericActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            showScreen(SettingsActivity.class);
+            showScreen(LoginActivity.class);
             return true;
         }
 
@@ -69,7 +78,7 @@ public class MainActivity extends GenericActivity
         if (id == R.id.sad) {
             showScreen(SadActivity.class);
         } else if (id == R.id.faves) {
-            showScreen(ListActivity.class, "listName", "chaosking121");
+            showScreen(ListActivity.class, "listName", "faves");
         } else if (id == R.id.all) {
             showScreen(ListActivity.class, "listName", "all");
         } else if (id == R.id.search) {

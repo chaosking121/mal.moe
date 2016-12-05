@@ -1,4 +1,4 @@
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import moe.mal.waifus.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -46,7 +47,8 @@ public class ImageActivity extends GenericActivity implements LoadImage.Listener
         setContentView(R.layout.activity_image);
 
         Bundle extras = getIntent().getExtras();
-        waifu = ((String) extras.get("waifu")).toLowerCase().replace(' ', '_');
+        waifu = ((String) extras.get("waifu"));
+        waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
 
         mImageView = (ImageView) findViewById(R.id.imageView);
         mAttacher = new PhotoViewAttacher(mImageView);

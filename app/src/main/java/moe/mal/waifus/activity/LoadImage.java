@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +32,9 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
+
+import moe.mal.waifus.Ougi;
 
 /**
  * A tool for fetching images from mal.moe.
@@ -65,12 +68,19 @@ public class LoadImage extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String ... args) {
         String url = "https://mal.moe/api/waifus/"
                 + ("".equals(args[0]) ? DEFAULT_WAIFU : args[0]);
-
         try {
-            return BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+            return BitmapFactory.decodeStream(getInputStream(url));
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
+    }
+
+    private InputStream getInputStream(String url_string) throws IOException {
+        URL url = new URL(url_string);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("Authorization", Ougi.getInstance().getAuth());
+        return urlConnection.getInputStream();
     }
 
     @Override
@@ -82,6 +92,4 @@ public class LoadImage extends AsyncTask<String, Void, Bitmap> {
             mListener.onError();
         }
     }
-
-
 }

@@ -1,4 +1,4 @@
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

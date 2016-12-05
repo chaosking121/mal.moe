@@ -1,10 +1,12 @@
-package moe.mal.waifus;
+package moe.mal.waifus.activity;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+
+import moe.mal.waifus.R;
 
 public class SearchActivity extends GenericActivity {
 
