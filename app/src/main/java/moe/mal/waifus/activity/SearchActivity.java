@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import moe.mal.waifus.R;
 
-public class SearchActivity extends GenericActivity {
+public class SearchActivity extends SidebarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        super.setUpSidebar();
 
         TextView waifuSearch = (TextView) findViewById(R.id.waifuSearch);
         waifuSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {

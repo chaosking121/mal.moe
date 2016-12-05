@@ -5,12 +5,14 @@ import android.view.View;
 
 import moe.mal.waifus.R;
 
-public class SadActivity extends GenericActivity {
+public class SadActivity extends SidebarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sad);
+
+        super.setUpSidebar();
     }
 
     public void lilySelected(View v) {

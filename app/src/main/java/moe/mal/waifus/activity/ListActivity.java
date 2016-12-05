@@ -18,7 +18,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ListActivity extends GenericActivity {
+public class ListActivity extends SidebarActivity {
 
     WaifuAPI waifuAPI;
     String listName;
@@ -28,6 +28,8 @@ public class ListActivity extends GenericActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        super.setUpSidebar();
 
         Bundle extras = getIntent().getExtras();
 
