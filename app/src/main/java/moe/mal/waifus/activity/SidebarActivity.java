@@ -71,9 +71,9 @@ public abstract class SidebarActivity extends GenericActivity
         if (id == R.id.sad) {
             showScreen(SadActivity.class);
         } else if (id == R.id.faves) {
-            showScreen(FaveActivity.class, "listName", "faves");
+            showScreen(FaveActivity.class);
         } else if (id == R.id.all) {
-            showScreen(AllActivity.class, "listName", "all");
+            showScreen(AllActivity.class);
         } else if (id == R.id.search) {
             showScreen(SearchActivity.class);
         }
