@@ -3,6 +3,7 @@ package moe.mal.waifus.network;
 import java.util.List;
 
 import moe.mal.waifus.model.Token;
+import moe.mal.waifus.model.User;
 import moe.mal.waifus.model.Waifu;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -34,6 +35,13 @@ public interface WaifuAPI {
 
     @GET("waifus/token")
     Call<Token> getToken(@Header("Authorization") String authorization);
+
+    @FormUrlEncoded
+    @POST("waifus/users")
+    Call<User> signUp(@Field("username") String username, @Field("password") String password);
+
+    @GET("waifus/user/{username}")
+    Call<User> getUserInfo(@Path("username") String username, @Header("Authorization") String authorization);
 
     @GET("waifus/login")
     Call<String> login(@Header("Authorization") String authorization);

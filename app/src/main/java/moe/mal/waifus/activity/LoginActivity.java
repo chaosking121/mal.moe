@@ -9,6 +9,7 @@ import android.widget.EditText;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.Token;
+import moe.mal.waifus.model.User;
 import moe.mal.waifus.network.WaifuAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,6 +79,44 @@ public class LoginActivity extends GenericActivity {
     }
 
     public void signUpPressed(View v) {
+        final String username = ((EditText) findViewById(R.id.usernameField)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.passwordField)).getText().toString();
 
+        Ougi.getInstance().setCredentials(username, password);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getString(R.string.api_url_base))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WaifuAPI waifuAPI = retrofit.create(WaifuAPI.class);
+        Call<User> call = waifuAPI.signUp(username, password);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Ougi.getInstance().setCredentials(username, password);
+                showToast(String.format("Credentials saved successfully, welcome %s!", username));
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                showToast("Those credentials were invalid.");
+            }
+        });
+
+        if (verifyCredentials()) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Ougi.getInstance().getMainActivity());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("username", username);
+            editor.putString("password", password);
+            editor.commit();
+            showToast(String.format("Credentials saved successfully, welcome %s!", username));
+        } else {
+            showToast("Those credentials were invalid.");
+            Ougi.getInstance().setCredentials(
+                    PreferenceManager.getDefaultSharedPreferences(this).getString("username", "user"),
+                    PreferenceManager.getDefaultSharedPreferences(this).getString("password", "pass"));
+        }
     }
 }
