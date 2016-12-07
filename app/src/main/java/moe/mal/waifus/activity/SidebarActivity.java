@@ -1,12 +1,17 @@
 package moe.mal.waifus.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
@@ -86,12 +91,38 @@ public abstract class SidebarActivity extends GenericActivity
             showScreen(AllActivity.class);
             drawer.closeDrawer(GravityCompat.START);
         } else if ((id == R.id.search) && !(this instanceof SearchActivity)) {
-            showScreen(SearchActivity.class);
             drawer.closeDrawer(GravityCompat.START);
+            showSearchPrompt();
         } else {
             drawer.closeDrawer(GravityCompat.START);
         }
 
         return false;
+    }
+
+    public void showSearchPrompt() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        displayWaifu(userInputDialogEditText.getText().toString());
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 }
