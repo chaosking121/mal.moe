@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.CredentialRequest;
 import com.google.android.gms.auth.api.credentials.CredentialRequestResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
@@ -16,6 +17,9 @@ import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.User;
 import moe.mal.waifus.network.WaifuAPI;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -123,12 +127,55 @@ public class MainActivity extends AuthActivity {
         // If the Credential is not a hint, we should store it an enable the delete button.
         // If it is a hint, skip this because a hint cannot be deleted.
         if (!isHint) {
+
             Ougi.getInstance().getUser().setCredential(credential);
-            showScreen(SadActivity.class);
+            attemptLogin();
         } else {
             //TODO: Ask to sign up?
             showToast("Credential Hint Retrieved");
         }
+    }
+
+    private void attemptLogin() {
+        Call<User> call = Ougi.getInstance().getWaifuAPI()
+                .getUserInfo(Ougi.getInstance().getUser().getUsername(),
+                        Ougi.getInstance().getUser().getAuth());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handleLoginResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                handleLoginResponse(null);
+            }
+        });
+    }
+
+    private void handleLoginResponse(Response<User> response) {
+        if ((response == null) || (response.code() != 200)) {
+            showToast("We were unable to log you in with those credentials.");
+            Auth.CredentialsApi.delete(mCredentialsApiClient,
+                    Ougi.getInstance().getUser().getCredential()).setResultCallback(
+                    new ResultCallback() {
+                        @Override
+                        public void onResult(Result result) {
+                            Ougi.getInstance().getUser().setCredential(null);
+                            showScreen(LoginActivity.class);
+                        }
+                    });
+            return;
+        }
+
+        Credential buffer = Ougi.getInstance().getUser().getCredential();
+
+        User user = response.body();
+        user.setCredential(buffer);
+        Ougi.getInstance().setUser(user);
+
+        showScreen(SadActivity.class);
     }
 
     /**

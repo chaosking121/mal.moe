@@ -1,6 +1,10 @@
 package moe.mal.waifus.model;
 
+import android.util.Base64;
+
 import java.util.List;
+
+import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,63 +13,46 @@ public class User {
     @SerializedName("username")
     @Expose
     private String username;
+
     @SerializedName("auth_level")
     @Expose
     private Integer authLevel;
+
     @SerializedName("waifus")
     @Expose
     private List<String> waifus = null;
 
-    /**
-     *
-     * @return
-     * The username
-     */
+    private Credential credential;
+
+
+    // JSON Stuff
+
     public String getUsername() {
-        return username;
+        if (credential != null) {
+            return credential.getId();
+        } else if (username != null) {
+            return username;
+        } else {
+            return "user";
+        }
     }
 
-    /**
-     *
-     * @param username
-     * The username
-     */
     public void setUsername(String username) {
         this.username = username;
     }
 
-    /**
-     *
-     * @return
-     * The authLevel
-     */
     public Integer getAuthLevel() {
         return authLevel;
     }
 
-    /**
-     *
-     * @param authLevel
-     * The auth_level
-     */
     public void setAuthLevel(Integer authLevel) {
         this.authLevel = authLevel;
     }
 
-    /**
-     *
-     * @return
-     * The waifus
-     */
     public List<String> getWaifus() {
         return waifus;
     }
 
-    /**
-     *
-     * @param waifus
-     * The waifus
-     */
     public void setWaifus(List<String> waifus) {
         this.waifus = waifus;
     }
@@ -74,5 +61,32 @@ public class User {
     public String toString() {
         return String.format("%s - %d", username, authLevel);
     }
+
+    // Credential Stuff
+
+    public String getPassword() {
+        return (credential == null) ? "pass" : credential.getPassword();
+    }
+
+    public Credential getCredential() {
+        return credential;
+    }
+
+    public void setCredential(Credential credential) {
+        this.credential = credential;
+    }
+
+    public boolean isLoggedIn() {
+        return (credential != null);
+    }
+
+    public String getAuth() {
+        return buildAuth(getUsername(), getPassword());
+    }
+
+    public static String buildAuth(String username, String password) {
+        return "Basic " + Base64.encodeToString(String.format("%s:%s", username, password).getBytes(), Base64.NO_WRAP);
+    }
+
 
 }
