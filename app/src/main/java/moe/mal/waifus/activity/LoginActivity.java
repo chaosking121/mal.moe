@@ -18,12 +18,14 @@ import retrofit2.Response;
 
 public class LoginActivity extends AuthActivity {
 
-    private boolean status;
 
     private static final int RC_SAVE = 1;
 
     private EditText usernameField;
     private EditText passwordField;
+
+    private String username;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,28 @@ public class LoginActivity extends AuthActivity {
         usernameField = (EditText) findViewById(R.id.usernameField);
         passwordField = (EditText) findViewById(R.id.passwordField);
 
-        usernameField.setText(Ougi.getInstance().getUsername());
-        passwordField.setText(Ougi.getInstance().getPassword());
+        if (Ougi.getInstance().getUser().isLoggedIn()) {
+            usernameField.setText(Ougi.getInstance().getUser().getUsername());
+            passwordField.setText(Ougi.getInstance().getUser().getPassword());
+        }
+
+        (findViewById(R.id.loginButton)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loginPressed();
+                    }
+                }
+        );
+
+        (findViewById(R.id.signUpText)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        signUpPressed();
+                    }
+                }
+        );
     }
 
     /**
@@ -42,14 +64,34 @@ public class LoginActivity extends AuthActivity {
      * fields and attempts to save a new Credential to the Credentials API.
      */
     private void saveCredentialClicked() {
-        String username = usernameField.getText().toString();
-        String password = passwordField.getText().toString();
+        username = usernameField.getText().toString();
+        password = passwordField.getText().toString();
 
-        if (!(verifyCredentials(username, password))) {
-            showToast("Those credentials were invalid.");
+        attemptLogin();
+    }
+
+    private void attemptLogin() {
+        Call<User> call = Ougi.getInstance().getWaifuAPI()
+                .getUserInfo(username, User.buildAuth(username, password));
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handleLoginResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                handleLoginResponse(null);
+            }
+        });
+    }
+
+    private void handleLoginResponse(Response<User> response) {
+        if ((response == null) || (response.code() != 200)) {
+            onLoginFailed();
             return;
         }
-
 
         // Create a Credential with the user's email as the ID and storing the password.  We
         // could also add 'Name' and 'ProfilePictureURL' but that is outside the scope of this
@@ -58,7 +100,9 @@ public class LoginActivity extends AuthActivity {
                 .setPassword(password)
                 .build();
 
-        Ougi.getInstance().setCredential(credential);
+        User user = response.body();
+        user.setCredential(credential);
+        Ougi.getInstance().setUser(user);
 
         // NOTE: this method unconditionally saves the Credential built, even if all the fields
         // are blank or it is invalid in some other way.  In a real application you should contact
@@ -68,47 +112,55 @@ public class LoginActivity extends AuthActivity {
                 new ResolvingResultCallbacks<Status>(this, RC_SAVE) {
                     @Override
                     public void onSuccess(Status status) {
-                        showToast("Credential Saved");
                     }
 
                     @Override
                     public void onUnresolvableFailure(Status status) {
-                        showToast("Credential Save Failed");
                     }
                 });
 
         showScreen(SadActivity.class);
     }
 
-    private boolean verifyCredentials(String username, String password) {
+    public boolean validate() {
+        boolean valid = true;
 
-        Call<User> call = Ougi.getInstance().getWaifuAPI()
-                .getUserInfo(username, Ougi.buildAuth(username, password));
+        String username = usernameField.getText().toString();
+        String password = passwordField.getText().toString();
 
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                handleLoginResponse(response.body());
-            }
+        if (username.isEmpty()) {
+            usernameField.setError("enter a valid username address");
+            valid = false;
+        } else {
+            usernameField.setError(null);
+        }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                handleLoginResponse(null);
-            }
-        });
+        if (password.isEmpty()) {
+            passwordField.setError("enter a valid password");
+            valid = false;
+        } else {
+            passwordField.setError(null);
+        }
 
-        return status;
+        return valid;
     }
 
-    private void handleLoginResponse(User user) {
-        status = (user != null);
+
+    public void onLoginFailed() {
+        showToast("Login Failed");
     }
 
-    public void loginPressed(View v) {
+    public void loginPressed() {
+
+        if (!validate()) {
+            onLoginFailed();
+            return;
+        }
+
         saveCredentialClicked();
     }
 
-    public void signUpPressed(View v) {
+    public void signUpPressed() {
 
     }
 
