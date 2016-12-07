@@ -1,36 +1,58 @@
 package moe.mal.waifus.activity;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import moe.mal.waifus.R;
-import moe.mal.waifus.network.WaifuAPI;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import moe.mal.waifus.model.Waifu;
 
 public abstract class ListActivity extends SidebarActivity {
 
-    WaifuAPI waifuAPI;
-    ListView listView;
+    @BindView(R.id.listView) ListView listView;
+    @BindView(R.id.swipeToRefresh) SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        ButterKnife.bind(this);
+
         super.setUpSidebar();
 
-        listView = (ListView) findViewById(R.id.listView);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshWaifus();
+            }
+        });
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getString(R.string.api_url_base))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                displayWaifu(((Waifu) parent.getItemAtPosition(position)).getName());
+            }
+        });
 
-        waifuAPI = retrofit.create(WaifuAPI.class);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                handleLongPress(((Waifu) parent.getItemAtPosition(position)).getName());
+                return true;
+            }
+        });
 
         setWaifus();
     }
+
+    protected abstract void handleLongPress(String waifu);
+
+    protected abstract void refreshWaifus();
 
     protected abstract void setWaifus();
 }

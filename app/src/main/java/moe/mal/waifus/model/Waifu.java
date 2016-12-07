@@ -3,7 +3,7 @@ package moe.mal.waifus.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Waifu {
+public class Waifu implements Comparable<Waifu> {
 
     @SerializedName("count")
     @Expose
@@ -137,5 +137,10 @@ public class Waifu {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Waifu other) {
+        return this.name.compareTo(other.getName());
     }
 }

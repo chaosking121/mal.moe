@@ -1,10 +1,7 @@
 package moe.mal.waifus.activity;
 
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,8 +15,8 @@ import retrofit2.Response;
 public class AllActivity extends ListActivity {
 
     @Override
-    protected void setWaifus() {
-        Call<List<Waifu>> call = waifuAPI.getWaifuList("all", Ougi.getInstance().getUser().getAuth());
+    protected void refreshWaifus() {
+        Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().getWaifuList("all", Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
@@ -28,32 +25,26 @@ public class AllActivity extends ListActivity {
                 Collections.sort(waifus);
                 listView.setAdapter(
                         new ArrayAdapter<>(c, R.layout.waifu_entry, waifus));
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<List<Waifu>> call, Throwable t) {
                 showToast("Failed to load waifus.");
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                displayWaifu(((Waifu) parent.getItemAtPosition(position)).getName());
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                addToList(((Waifu) parent.getItemAtPosition(position)).getName());
-                return true;
+                swipeContainer.setRefreshing(false);
             }
         });
     }
 
-    public void addToList(String waifu) {
-        Call<List<Waifu>> call = waifuAPI.addWaifuToList(Ougi.getInstance().getUser().getUsername()
+    @Override
+    protected void setWaifus() {
+        refreshWaifus();
+    }
+
+    @Override
+    public void handleLongPress(String waifu) {
+        //Adding a waifu to the user's favourite list
+        Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().addWaifuToList(Ougi.getInstance().getUser().getUsername()
                 , waifu, Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<List<Waifu>>() {

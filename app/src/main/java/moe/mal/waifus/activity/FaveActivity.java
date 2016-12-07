@@ -1,7 +1,5 @@
 package moe.mal.waifus.activity;
 
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import java.util.List;
@@ -21,8 +19,8 @@ import retrofit2.Response;
 public class FaveActivity extends ListActivity {
 
     @Override
-    protected void setWaifus() {
-        Call<User> call = waifuAPI.getUserInfo(Ougi.getInstance().getUser().getUsername(),
+    protected void refreshWaifus() {
+        Call<User> call = Ougi.getInstance().getWaifuAPI().getUserInfo(Ougi.getInstance().getUser().getUsername(),
                 Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<User>() {
@@ -30,33 +28,27 @@ public class FaveActivity extends ListActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 listView.setAdapter(
                         new ArrayAdapter<>(c, R.layout.waifu_entry, response.body().getWaifus()));
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 showToast("Failed to load waifus.");
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                displayWaifu(((String) parent.getItemAtPosition(position)));
-            }
-        });
-
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                removeFromList(((String) parent.getItemAtPosition(position)));
-                return true;
+                swipeContainer.setRefreshing(false);
             }
         });
     }
 
-    public void removeFromList(String waifu) {
-        Call<List<Waifu>> call = waifuAPI.removeWaifuFromList(
+    @Override
+    protected void setWaifus() {
+        listView.setAdapter(
+                new ArrayAdapter<>(c, R.layout.waifu_entry, Ougi.getInstance().getUser().getWaifus()));
+    }
+
+    @Override
+    public void handleLongPress(String waifu) {
+        //Removing a waifu from the user's favourite list
+        Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().removeWaifuFromList(
                 Ougi.getInstance().getUser().getUsername(),
                 waifu,
                 Ougi.getInstance().getUser().getAuth());
@@ -65,7 +57,7 @@ public class FaveActivity extends ListActivity {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
                 showToast("Waifu removed successfully.");
-                setWaifus();
+                refreshWaifus();
             }
 
             @Override
