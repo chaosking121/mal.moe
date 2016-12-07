@@ -74,22 +74,24 @@ public abstract class SidebarActivity extends GenericActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if ((id == R.id.sad) && !(this instanceof SadActivity)) {
             showScreen(SadActivity.class);
-            return true;
+            drawer.closeDrawer(GravityCompat.START);
         } else if ((id == R.id.faves) && !(this instanceof FaveActivity)) {
             showScreen(FaveActivity.class);
-            return true;
+            drawer.closeDrawer(GravityCompat.START);
         } else if ((id == R.id.all) && !(this instanceof AllActivity)) {
             showScreen(AllActivity.class);
-            return true;
+            drawer.closeDrawer(GravityCompat.START);
         } else if ((id == R.id.search) && !(this instanceof SearchActivity)) {
             showScreen(SearchActivity.class);
-            return true;
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            drawer.closeDrawer(GravityCompat.START);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return false;
     }
 }
