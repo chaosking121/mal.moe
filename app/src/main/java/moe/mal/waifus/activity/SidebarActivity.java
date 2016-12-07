@@ -8,9 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 
 /**
+ * Abstract activity to be extended by activities that need to show the sidebar
  * Created by Arshad on 04/12/2016.
  */
 
@@ -57,7 +59,11 @@ public abstract class SidebarActivity extends GenericActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            showScreen(LoginActivity.class);
+            if (Ougi.getInstance().isLoggedIn()) {
+                showScreen(ProfileActivity.class);
+            } else {
+                showScreen(LoginActivity.class);
+            }
             return true;
         }
 
@@ -68,18 +74,22 @@ public abstract class SidebarActivity extends GenericActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.sad) {
+        if ((id == R.id.sad) && !(this instanceof SadActivity)) {
             showScreen(SadActivity.class);
-        } else if (id == R.id.faves) {
+            return true;
+        } else if ((id == R.id.faves) && !(this instanceof FaveActivity)) {
             showScreen(FaveActivity.class);
-        } else if (id == R.id.all) {
+            return true;
+        } else if ((id == R.id.all) && !(this instanceof AllActivity)) {
             showScreen(AllActivity.class);
-        } else if (id == R.id.search) {
+            return true;
+        } else if ((id == R.id.search) && !(this instanceof SearchActivity)) {
             showScreen(SearchActivity.class);
+            return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 }
