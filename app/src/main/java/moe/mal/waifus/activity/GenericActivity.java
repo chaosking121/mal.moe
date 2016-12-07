@@ -2,8 +2,11 @@ package moe.mal.waifus.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import butterknife.ButterKnife;
 
 /**
  * Generic Activity intended to be extended by other concrete activities.
@@ -13,6 +16,12 @@ import android.widget.Toast;
 public abstract class GenericActivity extends AppCompatActivity {
 
     protected final Context c = this;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
+    }
 
     protected void showScreen(Class cls) {
         Intent in = new Intent(c, cls);

@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.BindView;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 
@@ -18,6 +19,8 @@ import moe.mal.waifus.R;
 
 public abstract class SidebarActivity extends GenericActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
 
     protected void setUpSidebar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -88,7 +91,6 @@ public abstract class SidebarActivity extends GenericActivity
             return true;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;
     }

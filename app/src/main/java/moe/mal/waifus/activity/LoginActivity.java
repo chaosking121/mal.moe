@@ -2,13 +2,16 @@ package moe.mal.waifus.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.api.ResolvingResultCallbacks;
 import com.google.android.gms.common.api.Status;
 
+import butterknife.BindView;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.User;
@@ -21,8 +24,10 @@ public class LoginActivity extends AuthActivity {
 
     private static final int RC_SAVE = 1;
 
-    private EditText usernameField;
-    private EditText passwordField;
+    @BindView(R.id.usernameField) EditText usernameField;
+    @BindView(R.id.passwordField) EditText passwordField;
+    @BindView(R.id.loginButton) Button loginButton;
+    @BindView(R.id.signUpText) TextView signUpPrompt;
 
     private String username;
     private String password;
@@ -32,15 +37,12 @@ public class LoginActivity extends AuthActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        usernameField = (EditText) findViewById(R.id.usernameField);
-        passwordField = (EditText) findViewById(R.id.passwordField);
-
         if (Ougi.getInstance().getUser().isLoggedIn()) {
             usernameField.setText(Ougi.getInstance().getUser().getUsername());
             passwordField.setText(Ougi.getInstance().getUser().getPassword());
         }
 
-        (findViewById(R.id.loginButton)).setOnClickListener(
+        loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -49,7 +51,7 @@ public class LoginActivity extends AuthActivity {
                 }
         );
 
-        (findViewById(R.id.signUpText)).setOnClickListener(
+        signUpPrompt.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

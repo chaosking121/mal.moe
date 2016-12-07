@@ -6,9 +6,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import moe.mal.waifus.R;
 
 public class SearchActivity extends SidebarActivity {
+
+    @BindView(R.id.waifuSearch) TextView waifuSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +19,6 @@ public class SearchActivity extends SidebarActivity {
         setContentView(R.layout.activity_search);
 
         super.setUpSidebar();
-
-        TextView waifuSearch = (TextView) findViewById(R.id.waifuSearch);
         waifuSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -33,7 +34,6 @@ public class SearchActivity extends SidebarActivity {
     }
 
     public void searchSubmitted(View v) {
-        TextView waifuSearch = (TextView) findViewById(R.id.waifuSearch);
         displayWaifu(waifuSearch.getText().toString());
     }
 }
