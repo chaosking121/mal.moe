@@ -39,7 +39,7 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName=".activity.SadActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.ProfileActivity"></activity>
     </application>

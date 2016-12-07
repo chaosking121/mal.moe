@@ -1,7 +1,11 @@
 package moe.mal.waifus;
 
-import android.app.Activity;
 import android.util.Base64;
+
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import moe.mal.waifus.network.WaifuAPI;
 
 /**
  * I know nothing. It is you who knows everything, Araragi-senpai.
@@ -10,10 +14,9 @@ import android.util.Base64;
 public class Ougi {
     private static Ougi ourInstance = new Ougi();
 
-    private String username;
-    private String password;
-
-    private Activity mainActivity;
+    private Credential credential;
+    private GoogleApiClient googleAPIClient;
+    private WaifuAPI waifuAPI;
 
     private Ougi() {
     }
@@ -23,36 +26,39 @@ public class Ougi {
     }
 
     public String getAuth() {
+        return buildAuth(getUsername(), getPassword());
+    }
+
+    public static String buildAuth(String username, String password) {
         return "Basic " + Base64.encodeToString(String.format("%s:%s", username, password).getBytes(), Base64.NO_WRAP);
     }
 
-    public void setCredentials(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public void resetCredentials() {
-        setCredentials("user", "pass");
-    }
-
     public String getUsername() {
-        return username;
+        return (credential == null) ? "user" : credential.getId();
     }
 
     public String getPassword() {
-        return password;
+        return (credential == null) ? "pass" : credential.getPassword();
     }
 
     public boolean isLoggedIn() {
-        return "user".equals(username);
+        return (credential != null);
     }
 
-    public Activity getMainActivity() {
-        return mainActivity;
+    public void setCredential(Credential credential) {
+        this.credential = credential;
     }
 
-    public void setMainActivity(Activity mainActivity) {
-        this.mainActivity = mainActivity;
+    public Credential getCredential() {
+        return credential;
+    }
+
+    public void setWaifuAPI(WaifuAPI waifuAPI) {
+        this.waifuAPI = waifuAPI;
+    }
+
+    public WaifuAPI getWaifuAPI() {
+        return waifuAPI;
     }
 
 }
