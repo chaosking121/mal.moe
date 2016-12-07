@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.Status;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
+import moe.mal.waifus.model.User;
 import moe.mal.waifus.network.WaifuAPI;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -35,6 +36,8 @@ public class MainActivity extends AuthActivity {
         if (savedInstanceState != null) {
             mIsResolving = savedInstanceState.getBoolean(KEY_IS_RESOLVING);
         }
+
+        Ougi.getInstance().setUser(new User());
 
         Ougi.getInstance().setWaifuAPI(new Retrofit.Builder()
                 .baseUrl(getString(R.string.api_url_base))
@@ -120,7 +123,7 @@ public class MainActivity extends AuthActivity {
         // If the Credential is not a hint, we should store it an enable the delete button.
         // If it is a hint, skip this because a hint cannot be deleted.
         if (!isHint) {
-            Ougi.getInstance().setCredential(credential);
+            Ougi.getInstance().getUser().setCredential(credential);
             showScreen(SadActivity.class);
         } else {
             //TODO: Ask to sign up?

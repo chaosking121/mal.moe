@@ -59,7 +59,7 @@ public abstract class SidebarActivity extends GenericActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            if (Ougi.getInstance().isLoggedIn()) {
+            if (Ougi.getInstance().getUser().isLoggedIn()) {
                 showScreen(ProfileActivity.class);
             } else {
                 showScreen(LoginActivity.class);

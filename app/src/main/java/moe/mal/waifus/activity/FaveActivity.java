@@ -22,7 +22,8 @@ public class FaveActivity extends ListActivity {
 
     @Override
     protected void setWaifus() {
-        Call<User> call = waifuAPI.getUserInfo(Ougi.getInstance().getUsername(), Ougi.getInstance().getAuth());
+        Call<User> call = waifuAPI.getUserInfo(Ougi.getInstance().getUser().getUsername(),
+                Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -55,7 +56,10 @@ public class FaveActivity extends ListActivity {
     }
 
     public void removeFromList(String waifu) {
-        Call<List<Waifu>> call = waifuAPI.removeWaifuFromList(Ougi.getInstance().getUsername(), waifu, Ougi.getInstance().getAuth());
+        Call<List<Waifu>> call = waifuAPI.removeWaifuFromList(
+                Ougi.getInstance().getUser().getUsername(),
+                waifu,
+                Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<List<Waifu>>() {
             @Override

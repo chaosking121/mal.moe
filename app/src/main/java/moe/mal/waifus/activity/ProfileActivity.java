@@ -6,7 +6,6 @@ import android.view.View;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
@@ -21,16 +20,14 @@ public class ProfileActivity extends AuthActivity {
 
     public void logoutPressed(View v) {
         Auth.CredentialsApi.delete(mCredentialsApiClient,
-                Ougi.getInstance().getCredential()).setResultCallback(
+                Ougi.getInstance().getUser().getCredential()).setResultCallback(
                 new ResultCallback() {
                     @Override
                     public void onResult(Result result) {
-                        Status status = result.getStatus();
-                        if (status.isSuccess()) {
-                            Ougi.getInstance().setCredential(null);
-                            showScreen(LoginActivity.class);
-                        }
+                        Ougi.getInstance().getUser().setCredential(null);
+                        showScreen(LoginActivity.class);
                     }
                 });
+
     }
 }

@@ -79,7 +79,7 @@ public class LoadImage extends AsyncTask<String, Void, Bitmap> {
     private InputStream getInputStream(String url_string) throws IOException {
         URL url = new URL(url_string);
         URLConnection urlConnection = url.openConnection();
-        urlConnection.setRequestProperty("Authorization", Ougi.getInstance().getAuth());
+        urlConnection.setRequestProperty("Authorization", Ougi.getInstance().getUser().getAuth());
         return urlConnection.getInputStream();
     }
 

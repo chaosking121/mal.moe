@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import moe.mal.waifus.Ougi;
@@ -13,21 +15,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by Arshad on 04/12/2016.
- */
-
 public class AllActivity extends ListActivity {
 
     @Override
     protected void setWaifus() {
-        Call<List<Waifu>> call = waifuAPI.getWaifuList("all", Ougi.getInstance().getAuth());
+        Call<List<Waifu>> call = waifuAPI.getWaifuList("all", Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
+                List<Waifu> waifus = response.body();
+                Collections.sort(waifus);
                 listView.setAdapter(
-                        new ArrayAdapter<>(c, R.layout.waifu_entry, response.body()));
+                        new ArrayAdapter<>(c, R.layout.waifu_entry, waifus));
             }
 
             @Override
@@ -53,8 +53,8 @@ public class AllActivity extends ListActivity {
     }
 
     public void addToList(String waifu) {
-        Call<List<Waifu>> call = waifuAPI.addWaifuToList(Ougi.getInstance().getUsername()
-                , waifu, Ougi.getInstance().getAuth());
+        Call<List<Waifu>> call = waifuAPI.addWaifuToList(Ougi.getInstance().getUser().getUsername()
+                , waifu, Ougi.getInstance().getUser().getAuth());
 
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
