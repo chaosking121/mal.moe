@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
+
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 
@@ -21,7 +25,7 @@ import moe.mal.waifus.R;
  * Created by Arshad on 04/12/2016.
  */
 
-public abstract class SidebarActivity extends GenericActivity
+public abstract class SidebarActivity extends AuthActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected void setUpSidebar() {
@@ -75,34 +79,9 @@ public abstract class SidebarActivity extends GenericActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        if ((id == R.id.sad) && !(this instanceof SadActivity)) {
-            showScreen(SadActivity.class);
-            drawer.closeDrawer(GravityCompat.START);
-        } else if ((id == R.id.faves) && !(this instanceof FaveActivity)) {
-            showScreen(FaveActivity.class);
-            drawer.closeDrawer(GravityCompat.START);
-        } else if ((id == R.id.all) && !(this instanceof AllActivity)) {
-            showScreen(AllActivity.class);
-            drawer.closeDrawer(GravityCompat.START);
-        } else if ((id == R.id.search) && !(this instanceof SearchActivity)) {
-            drawer.closeDrawer(GravityCompat.START);
-            showSearchPrompt();
-        } else {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-
-        return false;
-    }
-
-    public void showSearchPrompt() {
+    protected void showSearchPrompt() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_search, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
         alertDialogBuilderUserInput.setView(mView);
 
@@ -124,5 +103,75 @@ public abstract class SidebarActivity extends GenericActivity
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+    protected void showPromotionPrompt() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_promotion, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        displayWaifu(userInputDialogEditText.getText().toString());
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+
+    }
+
+    protected void logout() {
+        Auth.CredentialsApi.delete(mCredentialsApiClient,
+                Ougi.getInstance().getUser().getCredential()).setResultCallback(
+                new ResultCallback() {
+                    @Override
+                    public void onResult(Result result) {
+                        Ougi.getInstance().getUser().setCredential(null);
+                        showScreen(LoginActivity.class);
+                    }
+                });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        if ((id == R.id.sad) && !(this instanceof SadActivity)) {
+            showScreen(SadActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if ((id == R.id.faves) && !(this instanceof FaveActivity)) {
+            showScreen(FaveActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if ((id == R.id.all) && !(this instanceof AllActivity)) {
+            showScreen(AllActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.search) {
+            drawer.closeDrawer(GravityCompat.START);
+            showSearchPrompt();
+        } else if (id == R.id.promote) {
+            drawer.closeDrawer(GravityCompat.START);
+            showPromotionPrompt();
+        } else if (id == R.id.logout) {
+            drawer.closeDrawer(GravityCompat.START);
+            logout();
+        } else {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
+        return false;
     }
 }

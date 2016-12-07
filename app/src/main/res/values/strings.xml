@@ -38,6 +38,11 @@
     <string name="login">Login</string>
     <string name="password">password</string>
     <string name="username">username</string>
+    <string name="enter_promotion_code">Enter Promotion Code</string>
+    <string name="promo_code">promo code</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="user_profile">User Profile</string>
+    <string name="log_out">Log Out</string>
 
     <string-array name="pref_example_list_values">
         <item>1</item>

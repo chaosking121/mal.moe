@@ -20,16 +20,16 @@
             android:title="@string/search" />
     </group>
 
-    <item android:title="Dummy Stuff">
+    <item android:title="@string/user_profile">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/promote"
+                android:icon="@drawable/ic_promote_black_24dp"
+                android:title="@string/enter_promotion_code" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_logout_black_24dp"
+                android:title="@string/log_out" />
         </menu>
     </item>
 

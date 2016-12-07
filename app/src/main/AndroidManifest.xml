@@ -26,10 +26,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activity.AllActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask" />
@@ -41,14 +37,7 @@
             android:name=".activity.SadActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:parentActivityName=".activity.SadActivity"
-            android:launchMode="singleTask" />
         <activity android:name=".activity.LoginActivity"
-            android:parentActivityName=".activity.SadActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activity.ProfileActivity"
             android:parentActivityName=".activity.SadActivity"
             android:launchMode="singleTask" />
     </application>

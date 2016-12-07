@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
@@ -28,7 +27,7 @@ public class LoginActivity extends AuthActivity {
     @BindView(R.id.usernameField) EditText usernameField;
     @BindView(R.id.passwordField) EditText passwordField;
     @BindView(R.id.loginButton) Button loginButton;
-    @BindView(R.id.signUpText) TextView signUpPrompt;
+    @BindView(R.id.signUpButton) Button signUpButton;
 
     private String username;
     private String password;
@@ -54,7 +53,7 @@ public class LoginActivity extends AuthActivity {
                 }
         );
 
-        signUpPrompt.setOnClickListener(
+        signUpButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -64,17 +63,6 @@ public class LoginActivity extends AuthActivity {
         );
     }
 
-    /**
-     * Called when the save button is clicked.  Reads the entries in the email and password
-     * fields and attempts to save a new Credential to the Credentials API.
-     */
-    private void saveCredentialClicked() {
-        username = usernameField.getText().toString();
-        password = passwordField.getText().toString();
-
-        attemptLogin();
-    }
-
     private void attemptLogin() {
         Call<User> call = Ougi.getInstance().getWaifuAPI()
                 .getUserInfo(username, User.buildAuth(username, password));
@@ -82,19 +70,23 @@ public class LoginActivity extends AuthActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                handleLoginResponse(response);
+                handleServerResponse(response, true);
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                handleLoginResponse(null);
+                handleServerResponse(null, true);
             }
         });
     }
 
-    private void handleLoginResponse(Response<User> response) {
+    private void handleServerResponse(Response<User> response, boolean login) {
         if ((response == null) || (response.code() != 200)) {
-            onLoginFailed();
+            if (login) {
+                showToast("Those credentials weren't correct.");
+            } else {
+                showToast("Sign up failed. Are you already registered?");
+            }
             return;
         }
 
@@ -150,23 +142,44 @@ public class LoginActivity extends AuthActivity {
         return valid;
     }
 
-
-    public void onLoginFailed() {
-        showToast("Login Failed");
+    public void onValidateFailed() {
+        showToast("Please enter valid credentials.");
     }
 
     public void loginPressed() {
-
         if (!validate()) {
-            onLoginFailed();
+            onValidateFailed();
             return;
         }
 
-        saveCredentialClicked();
+        username = usernameField.getText().toString();
+        password = passwordField.getText().toString();
+        attemptLogin();
     }
 
     public void signUpPressed() {
+        if (!validate()) {
+            onValidateFailed();
+            return;
+        }
 
+        username = usernameField.getText().toString();
+        password = passwordField.getText().toString();
+
+        Call<User> call = Ougi.getInstance().getWaifuAPI()
+                .signUp(username, User.buildAuth(username, password));
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handleServerResponse(response, false);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                handleServerResponse(null, false);
+            }
+        });
     }
 
 }
