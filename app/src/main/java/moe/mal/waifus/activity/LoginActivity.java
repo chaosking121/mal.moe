@@ -21,7 +21,6 @@ import retrofit2.Response;
 
 public class LoginActivity extends AuthActivity {
 
-
     private static final int RC_SAVE = 1;
 
     @BindView(R.id.usernameField) EditText usernameField;

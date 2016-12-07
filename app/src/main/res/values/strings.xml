@@ -43,6 +43,8 @@
     <string name="sign_up">Sign Up</string>
     <string name="user_profile">User Profile</string>
     <string name="log_out">Log Out</string>
+    <string name="about">About</string>
+    <string name="waiting_message">Please wait, trying to log you in now!</string>
 
     <string-array name="pref_example_list_values">
         <item>1</item>
