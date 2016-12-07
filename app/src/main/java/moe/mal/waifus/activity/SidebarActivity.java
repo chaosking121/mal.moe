@@ -14,11 +14,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
+import moe.mal.waifus.model.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Abstract activity to be extended by activities that need to show the sidebar
@@ -105,6 +110,40 @@ public abstract class SidebarActivity extends AuthActivity
         alertDialogAndroid.show();
     }
 
+    private void tryToPromoteSelf(String token) {
+        Call<User> call = Ougi.getInstance().getWaifuAPI()
+                .promoteSelf(token,
+                        Ougi.getInstance().getUser().getAuth());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handlePromoteResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                handlePromoteResponse(null);
+            }
+        });
+    }
+
+    private void handlePromoteResponse(Response<User> response) {
+        if ((response == null) || (response.code() != 200)) {
+            showToast("Unable to promote you.");
+            return;
+        }
+
+        Credential buffer = Ougi.getInstance().getUser().getCredential();
+
+        User user = response.body();
+        user.setCredential(buffer);
+        Ougi.getInstance().setUser(user);
+
+        showToast(String.format("Promoted successfully to level %d.", user.getAuthLevel()));
+    }
+
+
     protected void showPromotionPrompt() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
         View mView = layoutInflaterAndroid.inflate(R.layout.dialog_promotion, null);
@@ -114,9 +153,9 @@ public abstract class SidebarActivity extends AuthActivity
         final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
         alertDialogBuilderUserInput
                 .setCancelable(false)
-                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
-                        displayWaifu(userInputDialogEditText.getText().toString());
+                        tryToPromoteSelf(userInputDialogEditText.getText().toString());
                     }
                 })
 
