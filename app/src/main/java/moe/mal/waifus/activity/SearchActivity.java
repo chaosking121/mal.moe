@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import moe.mal.waifus.R;
 
 public class SearchActivity extends SidebarActivity {
@@ -17,6 +18,8 @@ public class SearchActivity extends SidebarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ButterKnife.bind(this);
 
         super.setUpSidebar();
         waifuSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
-
 /**
  * Generic Activity intended to be extended by other concrete activities.
  * Created by Arshad on 03/12/2016.
@@ -20,7 +18,6 @@ public abstract class GenericActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
     }
 
     protected void showScreen(Class cls) {

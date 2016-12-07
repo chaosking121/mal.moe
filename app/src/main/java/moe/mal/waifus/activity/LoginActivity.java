@@ -12,6 +12,7 @@ import com.google.android.gms.common.api.ResolvingResultCallbacks;
 import com.google.android.gms.common.api.Status;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.User;
@@ -36,6 +37,8 @@ public class LoginActivity extends AuthActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ButterKnife.bind(this);
 
         if (Ougi.getInstance().getUser().isLoggedIn()) {
             usernameField.setText(Ougi.getInstance().getUser().getUsername());
