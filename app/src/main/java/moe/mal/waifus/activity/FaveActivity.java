@@ -20,19 +20,19 @@ public class FaveActivity extends ListActivity {
 
     @Override
     protected void refreshWaifus() {
-        Call<User> call = Ougi.getInstance().getWaifuAPI().getUserInfo(Ougi.getInstance().getUser().getUsername(),
+        Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().getWaifuList(Ougi.getInstance().getUser().getUsername(),
                 Ougi.getInstance().getUser().getAuth());
 
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback<List<Waifu>>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
                 listView.setAdapter(
-                        new ArrayAdapter<>(c, R.layout.waifu_entry, response.body().getWaifus()));
+                        new ArrayAdapter<>(c, R.layout.waifu_entry, response.body()));
                 swipeContainer.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<List<Waifu>> call, Throwable t) {
                 showToast("Failed to load waifus.");
                 swipeContainer.setRefreshing(false);
             }
@@ -41,8 +41,7 @@ public class FaveActivity extends ListActivity {
 
     @Override
     protected void setWaifus() {
-        listView.setAdapter(
-                new ArrayAdapter<>(c, R.layout.waifu_entry, Ougi.getInstance().getUser().getWaifus()));
+        refreshWaifus();
     }
 
     @Override
