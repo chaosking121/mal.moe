@@ -166,7 +166,7 @@ public class LoginActivity extends AuthActivity {
         password = passwordField.getText().toString();
 
         Call<User> call = Ougi.getInstance().getWaifuAPI()
-                .signUp(username, User.buildAuth(username, password));
+                .signUp(username, password);
 
         call.enqueue(new Callback<User>() {
             @Override
