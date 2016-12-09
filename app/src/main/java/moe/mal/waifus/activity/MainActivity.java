@@ -136,6 +136,9 @@ public class MainActivity extends AuthActivity {
         }
     }
 
+    /**
+     * Helper method that attempts to login with the provided credentials
+     */
     private void attemptLogin() {
         Call<User> call = Ougi.getInstance().getWaifuAPI()
                 .getUserInfo(Ougi.getInstance().getUser().getUsername(),
@@ -154,6 +157,10 @@ public class MainActivity extends AuthActivity {
         });
     }
 
+    /**
+     * Handles the response generated from the login API request
+     * @param response the instance of the Response object
+     */
     private void handleLoginResponse(Response<User> response) {
         if ((response == null) || (response.code() != 200)) {
             showToast("We were unable to log you in with those credentials.");

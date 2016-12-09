@@ -15,10 +15,18 @@ public class SadActivity extends SidebarActivity {
         super.setUpSidebar();
     }
 
+    /**
+     * Handles when the lily button is pressed
+     * @param v the view
+     */
     public void lilySelected(View v) {
         displayWaifu("lily");
     }
 
+    /**
+     * Handles when the sad button is pressed
+     * @param v the view
+     */
     public void sadSelected(View v) {
         displayWaifu("sad");
     }

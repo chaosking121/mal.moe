@@ -50,9 +50,20 @@ public abstract class ListActivity extends SidebarActivity {
         setWaifus();
     }
 
+    /**
+     * Handles when a waifu in a list is long pressed
+     * @param waifu the waifu that long pressed
+     */
     protected abstract void handleLongPress(String waifu);
 
+    /**
+     * Method that refreshes the waifus from the backend and updates the view
+     */
     protected abstract void refreshWaifus();
 
+    /**
+     * Method that gets called to setup the initial view with a list of waifus.
+     * Can be different from refreshWaifus
+     */
     protected abstract void setWaifus();
 }

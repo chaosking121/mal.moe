@@ -23,7 +23,6 @@ public class ImageActivity extends GenericActivity implements LoadImage.Listener
     PhotoViewAttacher mAttacher;
 
     private class PhotoTapListener implements PhotoViewAttacher.OnPhotoTapListener {
-
         @Override
         public void onPhotoTap(View view, float x, float y) {
             if (((BitmapDrawable) mImageView.getDrawable()).getBitmap().sameAs(nextImage)) {
@@ -39,7 +38,6 @@ public class ImageActivity extends GenericActivity implements LoadImage.Listener
             finish();
         }
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,10 +79,16 @@ public class ImageActivity extends GenericActivity implements LoadImage.Listener
         showToast(getString(R.string.failed_to_load_image));
     }
 
+    /**
+     * Executes the Async task for loading a new image
+     */
     private void loadNewImage() {
         new LoadImage(this).execute(waifu);
     }
 
+    /**
+     * Updates the image displayed in the imageview
+     */
     private void updateImage() {
         mImageView.setImageBitmap(nextImage);
         mAttacher.update();

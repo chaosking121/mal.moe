@@ -6,13 +6,13 @@ import java.util.List;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
-import moe.mal.waifus.model.User;
 import moe.mal.waifus.model.Waifu;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Activity for the screen that shows the list of a user's favourite waifus
  * Created by Arshad on 04/12/2016.
  */
 

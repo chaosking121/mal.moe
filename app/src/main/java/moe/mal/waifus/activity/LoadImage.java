@@ -47,11 +47,18 @@ public class LoadImage extends AsyncTask<String, Void, Bitmap> {
 
     public static final String DEFAULT_WAIFU = "lily";
 
+    /**
+     * Constructor for the LoadImage async task
+     * @param listener the listener to which completion methods are called
+     */
     public LoadImage(Listener listener) {
         mListener = listener;
     }
 
-    public interface Listener{
+    /**
+     * Inner interface defining what a listener should do
+     */
+    public interface Listener {
         void onImageLoaded(Bitmap bitmap);
         void onError();
         void setLoadingState(int state);
@@ -76,6 +83,12 @@ public class LoadImage extends AsyncTask<String, Void, Bitmap> {
         }
     }
 
+    /**
+     * Helper method to get the input stream from a url
+     * @param url_string the url to be visited
+     * @return an instance of InputStream generated from the url provided
+     * @throws IOException if there is an error getting the input stream or opening the url
+     */
     private InputStream getInputStream(String url_string) throws IOException {
         URL url = new URL(url_string);
         URLConnection urlConnection = url.openConnection();

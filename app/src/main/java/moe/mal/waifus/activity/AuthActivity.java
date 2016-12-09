@@ -6,12 +6,18 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+/**
+ * Abstract activity for classes that need access to the Credential API
+ * Created by Arshad on 04/12/2016.
+ */
+
 public abstract class AuthActivity extends GenericActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     protected GoogleApiClient mCredentialsApiClient;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

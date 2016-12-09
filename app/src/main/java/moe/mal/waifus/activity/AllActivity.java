@@ -12,6 +12,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Activity for the screen that shows the list of all waifus
+ * Created by Arshad on 04/12/2016.
+ */
+
 public class AllActivity extends ListActivity {
 
     @Override

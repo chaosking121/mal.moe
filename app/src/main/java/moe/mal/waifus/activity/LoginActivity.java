@@ -62,6 +62,9 @@ public class LoginActivity extends AuthActivity {
         );
     }
 
+    /**
+     * Helper method that attempts to login with the provided credentials
+     */
     private void attemptLogin() {
         Call<User> call = Ougi.getInstance().getWaifuAPI()
                 .getUserInfo(username, User.buildAuth(username, password));
@@ -79,6 +82,11 @@ public class LoginActivity extends AuthActivity {
         });
     }
 
+    /**
+     * Helper method that takes a response and parses it
+     * @param response the Response instance that is generated from the API call
+     * @param login true if the call was made from login, false if from sign up
+     */
     private void handleServerResponse(Response<User> response, boolean login) {
         if ((response == null) || (response.code() != 200)) {
             if (login) {
@@ -118,6 +126,10 @@ public class LoginActivity extends AuthActivity {
         showScreen(SadActivity.class);
     }
 
+    /**
+     * Helper method to validate user credentials
+     * @return true if valid
+     */
     public boolean validate() {
         boolean valid = true;
 
@@ -141,10 +153,16 @@ public class LoginActivity extends AuthActivity {
         return valid;
     }
 
+    /**
+     * Helper method to handle when credential validation failed
+     */
     public void onValidateFailed() {
         showToast("Please enter valid credentials.");
     }
 
+    /**
+     * Method to be executed when the login button is pressed
+     */
     public void loginPressed() {
         if (!validate()) {
             onValidateFailed();
@@ -156,6 +174,9 @@ public class LoginActivity extends AuthActivity {
         attemptLogin();
     }
 
+    /**
+     * Method to be executed when the sign up button is pressed
+     */
     public void signUpPressed() {
         if (!validate()) {
             onValidateFailed();
