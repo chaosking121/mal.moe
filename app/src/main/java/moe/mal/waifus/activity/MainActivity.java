@@ -170,7 +170,7 @@ public class MainActivity extends AuthActivity {
                         @Override
                         public void onResult(Result result) {
                             Ougi.getInstance().getUser().setCredential(null);
-                            showScreen(LoginActivity.class);
+                            moveApp(LoginActivity.class);
                         }
                     });
             return;
@@ -182,7 +182,7 @@ public class MainActivity extends AuthActivity {
         user.setCredential(buffer);
         Ougi.getInstance().setUser(user);
 
-        showScreen(SadActivity.class);
+        moveApp(SadActivity.class);
     }
 
     /**
@@ -212,8 +212,8 @@ public class MainActivity extends AuthActivity {
                         } else {
                             // We failed to retrieve any credentials. Assume there are none
                             // and move on. In the future, the toast should be removed.
-                            showToast("Error retrieving credentials. Error: " + status.getStatusCode());
-                            showScreen(LoginActivity.class);
+                            // showToast("Error retrieving credentials. Error: " + status.getStatusCode());
+                            moveApp(LoginActivity.class);
                         }
                     }
                 });

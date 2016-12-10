@@ -20,6 +20,9 @@ public abstract class GenericActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
     }
 
     /**
@@ -61,5 +64,16 @@ public abstract class GenericActivity extends AppCompatActivity {
      */
     protected void displayWaifu(String waifu) {
         showScreen(ImageActivity.class, "waifu", waifu);
+    }
+
+    /**
+     * This method displays a new view same as showScreen, but prevents getting back to this screen.
+     * @param cls
+     */
+    protected void moveApp(Class cls) {
+        Intent in = new Intent(c, cls);
+        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(in);
+        this.finish();
     }
 }

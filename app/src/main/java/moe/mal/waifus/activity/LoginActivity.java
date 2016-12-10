@@ -123,7 +123,7 @@ public class LoginActivity extends AuthActivity {
                     }
                 });
 
-        showScreen(SadActivity.class);
+        moveApp(SadActivity.class);
     }
 
     /**

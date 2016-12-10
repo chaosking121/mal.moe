@@ -197,7 +197,7 @@ public abstract class SidebarActivity extends AuthActivity
                     @Override
                     public void onResult(Result result) {
                         Ougi.getInstance().getUser().setCredential(null);
-                        showScreen(LoginActivity.class);
+                        moveApp(LoginActivity.class);
                     }
                 });
     }
