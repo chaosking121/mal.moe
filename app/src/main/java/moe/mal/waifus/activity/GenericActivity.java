@@ -1,5 +1,6 @@
 package moe.mal.waifus.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 public abstract class GenericActivity extends AppCompatActivity {
 
+    protected final Activity a = this;
     protected final Context c = this;
 
     @Override

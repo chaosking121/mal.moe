@@ -1,9 +1,12 @@
 package moe.mal.waifus.activity;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+import butterknife.BindDrawable;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.Waifu;
@@ -18,6 +21,8 @@ import retrofit2.Response;
 
 public class FaveActivity extends ListActivity {
 
+    @BindDrawable(R.drawable.ic_close_black_24dp) Drawable entryIcon;
+
     @Override
     protected void refreshWaifus() {
         Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().getWaifuList(Ougi.getInstance().getUser().getUsername(),
@@ -27,7 +32,7 @@ public class FaveActivity extends ListActivity {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
                 listView.setAdapter(
-                        new ArrayAdapter<>(c, R.layout.waifu_entry, response.body()));
+                        new WaifuAdapter(a, response.body()));
                 swipeContainer.setRefreshing(false);
             }
 
@@ -64,5 +69,10 @@ public class FaveActivity extends ListActivity {
                 showToast("Failed to remove that waifu from your favourites.");
             }
         });
+    }
+
+    @Override
+    public Drawable getActionDrawable() {
+        return entryIcon;
     }
 }

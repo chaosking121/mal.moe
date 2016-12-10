@@ -1,5 +1,6 @@
 package moe.mal.waifus.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -16,6 +17,8 @@ public abstract class ListActivity extends SidebarActivity {
     @BindView(R.id.listView) ListView listView;
     @BindView(R.id.swipeToRefresh) SwipeRefreshLayout swipeContainer;
 
+    Drawable entryIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,21 +32,6 @@ public abstract class ListActivity extends SidebarActivity {
             @Override
             public void onRefresh() {
                 refreshWaifus();
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                displayWaifu(((Waifu) parent.getItemAtPosition(position)).getName());
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                handleLongPress(((Waifu) parent.getItemAtPosition(position)).getName());
-                return true;
             }
         });
 
@@ -66,4 +54,9 @@ public abstract class ListActivity extends SidebarActivity {
      * Can be different from refreshWaifus
      */
     protected abstract void setWaifus();
+
+    /**
+     * @return the icon to be used for the button on this entry
+     */
+    protected abstract Drawable getActionDrawable();
 }

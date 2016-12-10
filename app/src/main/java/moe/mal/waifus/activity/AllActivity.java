@@ -1,10 +1,12 @@
 package moe.mal.waifus.activity;
 
+import android.graphics.drawable.Drawable;
 import android.widget.ArrayAdapter;
 
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindDrawable;
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.Waifu;
@@ -19,6 +21,8 @@ import retrofit2.Response;
 
 public class AllActivity extends ListActivity {
 
+    @BindDrawable(R.drawable.ic_add_black_24dp) Drawable entryIcon;
+
     @Override
     protected void refreshWaifus() {
         Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().getWaifuList("all", Ougi.getInstance().getUser().getAuth());
@@ -29,7 +33,7 @@ public class AllActivity extends ListActivity {
                 List<Waifu> waifus = response.body();
                 Collections.sort(waifus);
                 listView.setAdapter(
-                        new ArrayAdapter<>(c, R.layout.waifu_entry, waifus));
+                        new WaifuAdapter(a, response.body()));
                 swipeContainer.setRefreshing(false);
             }
 
@@ -63,5 +67,10 @@ public class AllActivity extends ListActivity {
                 showToast("Failed to add that waifu to your favourites.");
             }
         });
+    }
+
+    @Override
+    public Drawable getActionDrawable() {
+        return entryIcon;
     }
 }
