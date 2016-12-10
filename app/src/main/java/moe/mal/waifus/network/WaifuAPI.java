@@ -49,6 +49,4 @@ public interface WaifuAPI {
     @FormUrlEncoded
     @POST("waifus/users/promote-self")
     Call<User> promoteSelf(@Field("token") String token, @Header("Authorization") String authorization);
-
-
 }
