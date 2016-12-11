@@ -24,22 +24,26 @@
         <activity
             android:name=".activity.ImageActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.AllActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:label="@string/all_waifus" />
         <activity
             android:name=".activity.FaveActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:label="@string/favorites" />
         <activity
             android:name=".activity.SadActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:label="@string/sad" />
         <activity android:name=".activity.LoginActivity"
             android:parentActivityName=".activity.SadActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:label="@string/login" />
     </application>
 
 </manifest>
