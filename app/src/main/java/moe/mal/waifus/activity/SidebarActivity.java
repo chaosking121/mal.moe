@@ -101,6 +101,10 @@ public abstract class SidebarActivity extends AuthActivity
                 .setCancelable(false)
                 .setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
+                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
+                            showToast("Invalid input.");
+                            return;
+                        }
                         displayWaifu(userInputDialogEditText.getText().toString());
                     }
                 })
@@ -171,6 +175,10 @@ public abstract class SidebarActivity extends AuthActivity
                 .setCancelable(false)
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
+                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
+                            showToast("Invalid input.");
+                            return;
+                        }
                         tryToPromoteSelf(userInputDialogEditText.getText().toString());
                     }
                 })
@@ -185,6 +193,10 @@ public abstract class SidebarActivity extends AuthActivity
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
 
+    }
+
+    private boolean verifyPromptText(String text) {
+        return !((text.isEmpty()) || (text.length() > 99));
     }
 
     /**
