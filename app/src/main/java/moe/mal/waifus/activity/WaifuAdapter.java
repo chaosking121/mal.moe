@@ -1,6 +1,8 @@
 package moe.mal.waifus.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,42 +22,42 @@ import moe.mal.waifus.model.Waifu;
  * Created by Arshad on 10/12/2016.
  */
 
-public class WaifuAdapter extends ArrayAdapter<Waifu> {
+public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> {
 
     private final List<Waifu> list;
     private final Activity context;
-    private LayoutInflater inflater;
 
-    static class ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name) TextView name;
         @BindView(R.id.count) TextView count;
         @BindView(R.id.action) ImageButton action;
 
         public ViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
     }
 
     public WaifuAdapter(Activity context, List<Waifu> list) {
-        super(context, R.layout.waifu_entry, list);
         this.context = context;
         this.list = list;
-        inflater = context.getLayoutInflater();
     }
 
+    @Override
+    public WaifuAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // Inflate the custom layout
+        View contactView = inflater.inflate(R.layout.waifu_entry, parent, false);
+
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(contactView);
+        return viewHolder;
+    }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-
-        ViewHolder holder;
-        if (view == null) {
-            view = inflater.inflate(R.layout.waifu_entry, parent, false);
-            holder = new ViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-
+    public void onBindViewHolder(WaifuAdapter.ViewHolder holder, int position) {
         final String name = list.get(position).getName();
 
         holder.name.setText(name);
@@ -83,8 +85,10 @@ public class WaifuAdapter extends ArrayAdapter<Waifu> {
                 ((ListActivity) context).handleLongPress(name);
             }
         });
-
-        return view;
     }
 
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 }

@@ -31,8 +31,9 @@ public class FaveActivity extends ListActivity {
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
-                listView.setAdapter(
-                        new WaifuAdapter(a, response.body()));
+                waifus.clear();
+                waifus.addAll(response.body());
+                adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
             }
 
@@ -42,11 +43,6 @@ public class FaveActivity extends ListActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
-    }
-
-    @Override
-    protected void setWaifus() {
-        refreshWaifus();
     }
 
     @Override

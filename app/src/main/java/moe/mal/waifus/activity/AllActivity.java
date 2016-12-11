@@ -30,11 +30,13 @@ public class AllActivity extends ListActivity {
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
-                List<Waifu> waifus = response.body();
-                Collections.sort(waifus);
-                listView.setAdapter(
-                        new WaifuAdapter(a, response.body()));
+                List<Waifu> newWaifus = response.body();
+                Collections.sort(newWaifus);
+                waifus.clear();
+                waifus.addAll(newWaifus);
+                adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
+
             }
 
             @Override
@@ -43,11 +45,6 @@ public class AllActivity extends ListActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
-    }
-
-    @Override
-    protected void setWaifus() {
-        refreshWaifus();
     }
 
     @Override
