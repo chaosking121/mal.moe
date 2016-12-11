@@ -18,6 +18,10 @@
             android:id="@+id/search"
             android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/search" />
+        <item
+            android:id="@+id/scrape"
+            android:icon="@drawable/ic_add_box_black_24dp"
+            android:title="@string/scrape" />
     </group>
 
     <item android:title="@string/user_profile">

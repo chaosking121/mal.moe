@@ -1,6 +1,9 @@
 package moe.mal.waifus.activity;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +21,12 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 
+import java.io.IOException;
+
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.User;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +54,6 @@ public abstract class SidebarActivity extends AuthActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -87,6 +92,80 @@ public abstract class SidebarActivity extends AuthActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void handleScrapeResponse(Response<ResponseBody> response) {
+
+        if ((response == null) || (response.code() != 200)) {
+            showToast("Scraping failed.");
+        } else {
+            try {
+                showToast(response.body().string().isEmpty() ? "Added to scraping queue." : response.body().toString());
+            } catch (IOException e) {
+                showToast("Scraping failed.");
+            }
+        }
+    }
+
+    private void attemptToScrape(String waifu, String url) {
+
+        Call<ResponseBody> call = Ougi.getInstance().getWaifuAPI()
+                .scrape(waifu, url,
+                        Ougi.getInstance().getUser().getAuth());
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                handleScrapeResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                handleScrapeResponse(null);
+            }
+        });
+    }
+
+    /**
+     * Displays a prompt asking the user to specify a waifu to view
+     */
+    protected void showScrapePrompt() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_scrape, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText waifuField = (EditText) mView.findViewById(R.id.waifuField);
+        final EditText urlField = (EditText) mView.findViewById(R.id.urlField);
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+
+        if (item.getText() != null) {
+            urlField.setText(item.getText());
+        }
+
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        if ((!verifyPromptText(waifuField.getText().toString()))
+                        || !verifyPromptText(urlField.getText().toString())) {
+                            showToast("Invalid input.");
+                            return;
+                        }
+                        attemptToScrape(waifuField.getText().toString(),urlField.getText().toString());
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+    }
     /**
      * Displays a prompt asking the user to specify a waifu to view
      */
@@ -118,6 +197,40 @@ public abstract class SidebarActivity extends AuthActivity
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+    /**
+     * Displays a prompt asking the user to enter a promotion code
+     */
+    protected void showPromotionPrompt() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_promotion, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
+                            showToast("Invalid input.");
+                            return;
+                        }
+                        tryToPromoteSelf(userInputDialogEditText.getText().toString());
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+
     }
 
     /**
@@ -161,42 +274,8 @@ public abstract class SidebarActivity extends AuthActivity
         showToast(String.format("Promoted successfully to level %d.", user.getAuthLevel()));
     }
 
-    /**
-     * Displays a prompt asking the user to enter a promotion code
-     */
-    protected void showPromotionPrompt() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_promotion, null);
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
-        alertDialogBuilderUserInput.setView(mView);
-
-        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
-                            showToast("Invalid input.");
-                            return;
-                        }
-                        tryToPromoteSelf(userInputDialogEditText.getText().toString());
-                    }
-                })
-
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        alertDialogAndroid.show();
-
-    }
-
     private boolean verifyPromptText(String text) {
-        return !((text.isEmpty()) || (text.length() > 99));
+        return !((text.isEmpty()) || (text.length() > 300));
     }
 
     /**
@@ -232,6 +311,9 @@ public abstract class SidebarActivity extends AuthActivity
         } else if (id == R.id.search) {
             drawer.closeDrawer(GravityCompat.START);
             showSearchPrompt();
+        } else if (id == R.id.scrape) {
+            drawer.closeDrawer(GravityCompat.START);
+            showScrapePrompt();
         } else if (id == R.id.promote) {
             drawer.closeDrawer(GravityCompat.START);
             showPromotionPrompt();

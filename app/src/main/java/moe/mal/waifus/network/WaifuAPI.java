@@ -5,6 +5,7 @@ import java.util.List;
 import moe.mal.waifus.model.Token;
 import moe.mal.waifus.model.User;
 import moe.mal.waifus.model.Waifu;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -49,4 +50,8 @@ public interface WaifuAPI {
     @FormUrlEncoded
     @POST("waifus/users/promote-self")
     Call<User> promoteSelf(@Field("token") String token, @Header("Authorization") String authorization);
+
+    @FormUrlEncoded
+    @POST("waifus/scrape")
+    Call<ResponseBody> scrape(@Field("waifu") String waifu, @Field("url") String url, @Header("Authorization") String authorization);
 }
