@@ -1,7 +1,6 @@
 package moe.mal.waifus.activity;
 
 import android.graphics.drawable.Drawable;
-import android.widget.ArrayAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +47,7 @@ public class AllActivity extends ListActivity {
     }
 
     @Override
-    public void handleLongPress(String waifu) {
+    public void handleListAction(String waifu) {
         //Adding a waifu to the user's favourite list
         Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().addWaifuToList(Ougi.getInstance().getUser().getUsername()
                 , waifu, Ougi.getInstance().getUser().getAuth());
@@ -67,7 +66,17 @@ public class AllActivity extends ListActivity {
     }
 
     @Override
-    public Drawable getActionDrawable() {
+    public boolean isAll() {
+        return true;
+    }
+
+    @Override
+    public Drawable getListActionIcon() {
         return entryIcon;
+    }
+
+    @Override
+    public String getListActionTitle() {
+        return "Add To Faves";
     }
 }

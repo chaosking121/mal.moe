@@ -124,10 +124,14 @@ public abstract class SidebarActivity extends AuthActivity
         });
     }
 
+    protected void showScrapePrompt() {
+        showScrapePrompt(null);
+    }
+
     /**
      * Displays a prompt asking the user to specify a waifu to view
      */
-    protected void showScrapePrompt() {
+    protected void showScrapePrompt(String waifu) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
         View mView = layoutInflaterAndroid.inflate(R.layout.dialog_scrape, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
@@ -137,10 +141,13 @@ public abstract class SidebarActivity extends AuthActivity
         final EditText urlField = (EditText) mView.findViewById(R.id.urlField);
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
 
-        if (item.getText() != null) {
-            urlField.setText(item.getText());
+        if (clipboard.hasPrimaryClip()) {
+            ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+
+            if (item.getText() != null) {
+                urlField.setText(item.getText());
+            }
         }
 
         alertDialogBuilderUserInput
@@ -162,6 +169,12 @@ public abstract class SidebarActivity extends AuthActivity
                                 dialogBox.cancel();
                             }
                         });
+
+        if (waifu != null) {
+            waifuField.setText(waifu);
+            waifuField.setFocusable(false);
+            urlField.requestFocus();
+        }
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
@@ -230,7 +243,6 @@ public abstract class SidebarActivity extends AuthActivity
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
-
     }
 
     /**

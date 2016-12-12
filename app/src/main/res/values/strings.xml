@@ -45,9 +45,11 @@
     <string name="log_out">Log Out</string>
     <string name="about">About</string>
     <string name="waiting_message">Please wait, trying to log you in now!</string>
-    <string name="url_to_scrape">Url to scrape</string>
+    <string name="url_to_scrape">url to scrape</string>
     <string name="waifu_name">waifu name</string>
     <string name="scrape">Scrape</string>
     <string name="scrape_prompt">Enter Waifu and Source</string>
+    <string name="scrape_image">Scrape Image</string>
+    <string name="delete_waifu">Delete Waifu</string>
 
 </resources>

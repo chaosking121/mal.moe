@@ -7,11 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,16 +55,16 @@ public abstract class ListActivity extends SidebarActivity {
      * Handles when a waifu in a list is long pressed
      * @param waifu the waifu that long pressed
      */
-    protected abstract void handleLongPress(String waifu);
+    protected abstract void handleListAction(String waifu);
 
     /**
      * Method that refreshes the waifus from the backend and updates the view
      */
     protected abstract void refreshWaifus();
 
-    /**
-     * @return the icon to be used for the button on this entry
-     */
-    protected abstract Drawable getActionDrawable();
+    public abstract boolean isAll();
 
+    public abstract Drawable getListActionIcon();
+
+    public abstract String getListActionTitle();
 }

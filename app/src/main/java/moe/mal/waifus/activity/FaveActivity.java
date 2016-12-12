@@ -1,8 +1,6 @@
 package moe.mal.waifus.activity;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class FaveActivity extends ListActivity {
     }
 
     @Override
-    public void handleLongPress(String waifu) {
+    public void handleListAction(String waifu) {
         //Removing a waifu from the user's favourite list
         Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().removeWaifuFromList(
                 Ougi.getInstance().getUser().getUsername(),
@@ -68,7 +66,17 @@ public class FaveActivity extends ListActivity {
     }
 
     @Override
-    public Drawable getActionDrawable() {
+    public boolean isAll() {
+        return false;
+    }
+
+    @Override
+    public Drawable getListActionIcon() {
         return entryIcon;
+    }
+
+    @Override
+    public String getListActionTitle() {
+        return "Remove From Faves";
     }
 }

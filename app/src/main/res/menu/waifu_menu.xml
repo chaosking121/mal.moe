@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/waifu_list_action"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/scrape_waifu"
+        android:orderInCategory="100"
+        android:title="@string/scrape_image"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_waifu"
+        android:orderInCategory="100"
+        android:title="@string/delete_waifu"
+        app:showAsAction="never" />
+</menu>
