@@ -1,12 +1,24 @@
 package moe.mal.waifus.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
+import moe.mal.waifus.model.WaifuImage;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -14,28 +26,33 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by Arshad on 23/10/2016.
  */
 
-public class ImageActivity extends GenericActivity implements LoadImage.Listener {
+public class ImageActivity extends GenericActivity {
     String waifu;
-    Bitmap nextImage;
-    boolean alreadyTapped;
+    WaifuImage image;
 
-    ImageView mImageView;
+    boolean loading;
+    boolean tapped;
+
+    @BindView(R.id.loadingLabel) TextView loadingLabel;
+
+    @BindView(R.id.imageView) PhotoView mImageView;
     PhotoViewAttacher mAttacher;
 
-    private class PhotoTapListener implements PhotoViewAttacher.OnPhotoTapListener {
+    private class PhotoTapListener implements PhotoViewAttacher.OnPhotoTapListener, ImageView.OnLongClickListener {
         @Override
         public void onPhotoTap(View view, float x, float y) {
-            if (((BitmapDrawable) mImageView.getDrawable()).getBitmap().sameAs(nextImage)) {
-                alreadyTapped = true;
-                return;
-            }
-            updateImage();
-            loadNewImage();
+            tapped = true;
+            requestImage();
         }
 
         @Override
         public void onOutsidePhotoTap() {
             finish();
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return true;
         }
     }
 
@@ -44,54 +61,88 @@ public class ImageActivity extends GenericActivity implements LoadImage.Listener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
+        ButterKnife.bind(this);
+
         Bundle extras = getIntent().getExtras();
         waifu = ((String) extras.get("waifu"));
         waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
 
-        mImageView = (ImageView) findViewById(R.id.imageView);
         mAttacher = new PhotoViewAttacher(mImageView);
-        mAttacher.setOnPhotoTapListener(new PhotoTapListener());
 
-//        mAttacher.setOnLongClickListener(new OnLongClickListener());
+        PhotoTapListener listener = new PhotoTapListener();
+        mAttacher.setOnPhotoTapListener(listener);
+        mAttacher.setOnLongClickListener(listener);
 
-        alreadyTapped = true;
-        loadNewImage();
+        tapped = true;
+        requestImage();
     }
 
-    @Override
-    public void onImageLoaded(Bitmap bitmap) {
-        if (alreadyTapped) {
-            nextImage = bitmap;
-            updateImage();
-            loadNewImage();
-        } else {
-            nextImage = bitmap;
+    private void requestImage() {
+        if (loading) {
+            return;
         }
+
+        setLoading(true);
+
+        Call<WaifuImage> call = Ougi.getInstance().getWaifuAPI()
+                .getImage(waifu,
+                        Ougi.getInstance().getUser().getAuth());
+
+        call.enqueue(new Callback<WaifuImage>() {
+            @Override
+            public void onResponse(Call<WaifuImage> call, Response<WaifuImage> response) {
+                handleImageResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<WaifuImage> call, Throwable t) {
+                handleImageResponse(null);
+            }
+        });
     }
 
-    @Override
-    public void setLoadingState(int state) {
-        (findViewById(R.id.loadingLabel)).setVisibility(state);
+    private void handleImageResponse(Response<WaifuImage> response) {
+        if ((response == null) || (response.body() == null)) {
+            showToast("Error loading image.");
+            return;
+        }
+
+        image = response.body();
+
+        Glide
+                .with(this)
+                .load(image.getImageUrl())
+                .fitCenter().dontAnimate()
+                .placeholder(mImageView.getDrawable())
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        showToast("Error loading image.");
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource,
+                                                   String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        mAttacher.update();
+                        setLoading(false);
+                        return false;
+                    }
+                })
+                .into(mImageView);
+        tapped = false;
     }
 
-    @Override
-    public void onError() {
-        showToast(getString(R.string.failed_to_load_image));
-    }
+    private void setLoading(boolean status) {
+        loading = status;
 
-    /**
-     * Executes the Async task for loading a new image
-     */
-    private void loadNewImage() {
-        new LoadImage(this).execute(waifu);
-    }
-
-    /**
-     * Updates the image displayed in the imageview
-     */
-    private void updateImage() {
-        mImageView.setImageBitmap(nextImage);
-        mAttacher.update();
-        alreadyTapped = false;
+        if (status) {
+            loadingLabel.setVisibility(View.VISIBLE);
+        } else {
+            loadingLabel.setVisibility(View.INVISIBLE);
+        }
     }
 }

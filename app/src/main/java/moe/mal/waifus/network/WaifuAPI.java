@@ -5,6 +5,7 @@ import java.util.List;
 import moe.mal.waifus.model.Token;
 import moe.mal.waifus.model.User;
 import moe.mal.waifus.model.Waifu;
+import moe.mal.waifus.model.WaifuImage;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -20,6 +21,10 @@ import retrofit2.http.Path;
  */
 
 public interface WaifuAPI {
+
+    @GET("waifus/{waifu}")
+    Call<WaifuImage> getImage(@Path("waifu") String waifu, @Header("Authorization") String authorization);
+
     @GET("waifus")
     Call<List<Waifu>> getAllWaifus(@Header("Authorization") String authorization);
 
