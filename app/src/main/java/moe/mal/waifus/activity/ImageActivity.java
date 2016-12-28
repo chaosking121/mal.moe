@@ -3,6 +3,7 @@ package moe.mal.waifus.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +34,9 @@ public class ImageActivity extends GenericActivity {
     boolean loading;
     boolean tapped;
 
-    @BindView(R.id.loadingLabel) TextView loadingLabel;
+//    @BindView(R.id.loadingLabel) TextView loadingLabel;
+
+    @BindView(R.id.imageProgressBar) ProgressBar progressBar;
 
     @BindView(R.id.imageView) PhotoView mImageView;
     PhotoViewAttacher mAttacher;
@@ -66,6 +69,8 @@ public class ImageActivity extends GenericActivity {
         Bundle extras = getIntent().getExtras();
         waifu = ((String) extras.get("waifu"));
         waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
+
+        progressBar.setIndeterminate(true);
 
         mAttacher = new PhotoViewAttacher(mImageView);
 
@@ -140,9 +145,9 @@ public class ImageActivity extends GenericActivity {
         loading = status;
 
         if (status) {
-            loadingLabel.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         } else {
-            loadingLabel.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 }
