@@ -1,7 +1,10 @@
 package moe.mal.waifus.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,6 +33,8 @@ public class LoginActivity extends AuthActivity {
 
     private String username;
     private String password;
+
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +99,7 @@ public class LoginActivity extends AuthActivity {
             } else {
                 showToast("Sign up failed. Are you already registered?");
             }
+            progress.dismiss();
             return;
         }
 
@@ -122,7 +128,7 @@ public class LoginActivity extends AuthActivity {
                     public void onUnresolvableFailure(Status status) {
                     }
                 });
-
+        progress.dismiss();
         moveApp(SadActivity.class);
     }
 
@@ -164,6 +170,9 @@ public class LoginActivity extends AuthActivity {
      * Method to be executed when the login button is pressed
      */
     public void loginPressed() {
+
+        showProgress("Trying to log you in.");
+
         if (!validate()) {
             onValidateFailed();
             return;
@@ -178,6 +187,9 @@ public class LoginActivity extends AuthActivity {
      * Method to be executed when the sign up button is pressed
      */
     public void signUpPressed() {
+
+        showProgress("Trying to sign you up.");
+
         if (!validate()) {
             onValidateFailed();
             return;
@@ -200,6 +212,26 @@ public class LoginActivity extends AuthActivity {
                 handleServerResponse(null, false);
             }
         });
+    }
+
+    /**
+     * Private helper method to show a progress dialog
+     * @param message the message to be displayed
+     */
+    private void showProgress(String message) {
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Please Wait");
+        progress.setMessage(message);
+        progress.setCancelable(true);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
     }
 
 }
