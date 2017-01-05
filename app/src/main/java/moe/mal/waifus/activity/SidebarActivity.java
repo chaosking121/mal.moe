@@ -90,7 +90,7 @@ public abstract class SidebarActivity extends AuthActivity
             showToast("Scraping failed.");
         } else {
             try {
-                showToast(response.body().string().isEmpty() ? "Added to scraping queue." : response.body().toString());
+                showToast(response.body().string().isEmpty() ? "Added to scraping queue." : response.body().string());
             } catch (IOException e) {
                 showToast("Scraping failed.");
             }
