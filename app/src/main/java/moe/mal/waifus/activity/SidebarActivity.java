@@ -85,15 +85,16 @@ public abstract class SidebarActivity extends AuthActivity
     }
 
     private void handleScrapeResponse(Response<ResponseBody> response) {
-
-        if ((response == null) || (response.code() != 200)) {
-            showToast("Scraping failed.");
-        } else {
-            try {
-                showToast(response.body().string().isEmpty() ? "Added to scraping queue." : response.body().string());
-            } catch (IOException e) {
+        try {
+            String res = response.body().string();
+            if ((response == null) || (response.code() != 200) || res.isEmpty()) {
                 showToast("Scraping failed.");
+            } else {
+                showToast(res);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showToast("Scraping failed.");
         }
     }
 
