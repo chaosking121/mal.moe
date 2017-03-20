@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="shiki_is_best_girl">Shiki is best girl~</string>
+    <string name="version">3.0.1</string>
 
     <!-- Imported from old app -->
     <string name="want_to_be">Sad Anime Girls</string>
