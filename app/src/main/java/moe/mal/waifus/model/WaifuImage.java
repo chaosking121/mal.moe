@@ -13,149 +13,116 @@ public class WaifuImage {
     @SerializedName("download_date")
     @Expose
     private String downloadDate;
-    @SerializedName("folder")
-    @Expose
-    private String folder;
     @SerializedName("hash")
     @Expose
     private String hash;
-    @SerializedName("image_id")
+    @SerializedName("id")
     @Expose
-    private Integer imageId;
-    @SerializedName("image_url")
+    private String id;
+    @SerializedName("source_url")
     @Expose
-    private String imageUrl;
-    @SerializedName("source")
-    @Expose
-    private String source;
+    private String sourceUrl;
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("waifu")
+    @Expose
+    private String waifu;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public WaifuImage() {
+    }
 
     /**
      *
-     * @return
-     * The downloadDate
+     * @param id
+     * @param downloadDate
+     * @param hash
+     * @param sourceUrl
+     * @param waifu
+     * @param url
      */
+    public WaifuImage(String downloadDate, String hash, String id, String sourceUrl, String url, String waifu) {
+        super();
+        this.downloadDate = downloadDate;
+        this.hash = hash;
+        this.id = id;
+        this.sourceUrl = sourceUrl;
+        this.url = url;
+        this.waifu = waifu;
+    }
+
     public String getDownloadDate() {
         return downloadDate;
     }
 
-    /**
-     *
-     * @param downloadDate
-     * The download_date
-     */
     public void setDownloadDate(String downloadDate) {
         this.downloadDate = downloadDate;
     }
 
-    /**
-     *
-     * @return
-     * The folder
-     */
-    public String getFolder() {
-        return folder;
-    }
-
-    /**
-     *
-     * @param folder
-     * The folder
-     */
-    public void setFolder(String folder) {
-        this.folder = folder;
-    }
-
-    /**
-     *
-     * @return
-     * The hash
-     */
     public String getHash() {
         return hash;
     }
 
-    /**
-     *
-     * @param hash
-     * The hash
-     */
     public void setHash(String hash) {
         this.hash = hash;
     }
 
-    /**
-     *
-     * @return
-     * The imageId
-     */
-    public Integer getImageId() {
-        return imageId;
+    public String getId() {
+        return id;
     }
 
-    /**
-     *
-     * @param imageId
-     * The image_id
-     */
-    public void setImageId(Integer imageId) {
-        this.imageId = imageId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    /**
-     *
-     * @return
-     * The imageUrl
-     */
-    public String getImageUrl() {
-        return imageUrl;
+    public String getSourceUrl() {
+        return sourceUrl;
     }
 
-    /**
-     *
-     * @param imageUrl
-     * The image_url
-     */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 
-    /**
-     *
-     * @return
-     * The source
-     */
-    public String getSource() {
-        return source;
-    }
-
-    /**
-     *
-     * @param source
-     * The source
-     */
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    /**
-     *
-     * @return
-     * The url
-     */
     public String getUrl() {
         return url;
     }
 
-    /**
-     *
-     * @param url
-     * The url
-     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    public String getWaifu() {
+        return waifu;
+    }
+
+    public void setWaifu(String waifu) {
+        this.waifu = waifu;
+    }
+
+    @Override
+    public String toString() {
+        return id;
+    }
+
+    @Override
+    public int hashCode() {
+        return ((Long) Long.parseLong(hash, 16)).intValue();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof WaifuImage) == false) {
+            return false;
+        }
+        return this.id.equals(((WaifuImage) other).id);
+    }
+
 }
+

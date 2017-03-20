@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mal.moe</string>
 
-    <string name="api_url_base">https://mal.moe/api/</string>
+    <string name="api_url_base">https://mal.moe/api/waifus/</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

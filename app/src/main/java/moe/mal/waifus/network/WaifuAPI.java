@@ -24,56 +24,56 @@ import retrofit2.http.Path;
 public interface WaifuAPI {
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus/{waifu}")
+    @GET("waifu/{waifu}")
     Call<WaifuImage> getImage(@Path("waifu") String waifu, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus")
+    @GET("all")
     Call<List<Waifu>> getAllWaifus(@Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus/lists/{listName}")
+    @GET("lists/{listName}")
     Call<List<Waifu>> getWaifuList(@Path("listName") String listName, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/lists/{listName}/add")
+    @POST("lists/{listName}/add")
     Call<List<Waifu>> addWaifuToList(@Path("listName") String listName , @Field("waifus") String waifu, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/lists/{listName}/remove")
+    @POST("lists/{listName}/remove")
     Call<List<Waifu>> removeWaifuFromList(@Path("listName") String listName, @Field("waifus") String waifu, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus/token")
+    @GET("users/token")
     Call<Token> getToken(@Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/users")
+    @POST("users/signup")
     Call<User> signUp(@Field("username") String username, @Field("password") String password);
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus/user/{username}")
+    @GET("users/user/{username}")
     Call<User> getUserInfo(@Path("username") String username, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
-    @GET("waifus/login")
+    @GET("users/login")
     Call<String> login(@Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/users/promote-self")
+    @POST("users/promote-self")
     Call<User> promoteSelf(@Field("token") String token, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/scrape")
+    @POST("scraping/scrape")
     Call<ResponseBody> scrape(@Field("waifu") String waifu, @Field("url") String url, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
-    @POST("waifus/push-token")
+    @POST("users/push-token")
     Call<ResponseBody> submitToken(@Field("token") String token, @Header("Authorization") String authorization);
 }

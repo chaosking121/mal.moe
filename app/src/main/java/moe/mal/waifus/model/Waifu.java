@@ -5,131 +5,91 @@ import com.google.gson.annotations.SerializedName;
 
 public class Waifu implements Comparable<Waifu> {
 
+    @SerializedName("series")
+    @Expose
+    private String series;
+    @SerializedName("waifu_type")
+    @Expose
+    private Integer waifuType;
+    @SerializedName("thumbnail_large")
+    @Expose
+    private String thumbnailLarge;
+    @SerializedName("thumbnail_small")
+    @Expose
+    private String thumbnailSmall;
     @SerializedName("count")
     @Expose
     private Integer count;
-    @SerializedName("id")
+    @SerializedName("message")
     @Expose
-    private Integer id;
-    @SerializedName("is3D")
+    private String message;
+    @SerializedName("min_auth_level")
     @Expose
-    private Boolean is3D;
-    @SerializedName("isNSFW")
-    @Expose
-    private Boolean isNSFW;
+    private Integer minAuthLevel;
     @SerializedName("name")
     @Expose
     private String name;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public Waifu() {
+    public String getSeries() {
+        return series;
     }
 
-    /**
-     *
-     * @param id the ID of this waifu
-     * @param isNSFW whether or not this waifu is NSFW
-     * @param count the number of images that this waifu has
-     * @param name the name of this waifu
-     * @param is3D whether or not this waifu is 3D
-     */
-    public Waifu(Integer count, Integer id, Boolean is3D, Boolean isNSFW, String name) {
-        this.count = count;
-        this.id = id;
-        this.is3D = is3D;
-        this.isNSFW = isNSFW;
-        this.name = name;
+    public void setSeries(String series) {
+        this.series = series;
     }
 
-    /**
-     *
-     * @return
-     * The count
-     */
+    public Integer getWaifuType() {
+        return waifuType;
+    }
+
+    public void setWaifuType(Integer waifuType) {
+        this.waifuType = waifuType;
+    }
+
+    public String getThumbnailLarge() {
+        return thumbnailLarge;
+    }
+
+    public void setThumbnailLarge(String thumbnailLarge) {
+        this.thumbnailLarge = thumbnailLarge;
+    }
+
+    public String getThumbnailSmall() {
+        return thumbnailSmall;
+    }
+
+    public void setThumbnailSmall(String thumbnailSmall) {
+        this.thumbnailSmall = thumbnailSmall;
+    }
+
     public Integer getCount() {
         return count;
     }
 
-    /**
-     *
-     * @param count
-     * The count
-     */
     public void setCount(Integer count) {
         this.count = count;
     }
 
-    /**
-     *
-     * @return
-     * The id
-     */
-    public Integer getId() {
-        return id;
+    public String getMessage() {
+        return message;
     }
 
-    /**
-     *
-     * @param id
-     * The id
-     */
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    /**
-     *
-     * @return
-     * The is3D
-     */
-    public Boolean getIs3D() {
-        return is3D;
+    public Integer getMinAuthLevel() {
+        return minAuthLevel;
     }
 
-    /**
-     *
-     * @param is3D
-     * The is3D
-     */
-    public void setIs3D(Boolean is3D) {
-        this.is3D = is3D;
+    public void setMinAuthLevel(Integer minAuthLevel) {
+        this.minAuthLevel = minAuthLevel;
     }
 
-    /**
-     *
-     * @return
-     * The isNSFW
-     */
-    public Boolean getIsNSFW() {
-        return isNSFW;
-    }
-
-    /**
-     *
-     * @param isNSFW
-     * The isNSFW
-     */
-    public void setIsNSFW(Boolean isNSFW) {
-        this.isNSFW = isNSFW;
-    }
-
-    /**
-     *
-     * @return
-     * The name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     *
-     * @param name
-     * The name
-     */
     public void setName(String name) {
         this.name = name;
     }

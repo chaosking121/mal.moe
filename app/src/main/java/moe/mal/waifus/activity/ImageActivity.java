@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -33,8 +32,6 @@ public class ImageActivity extends GenericActivity {
 
     boolean loading;
     boolean tapped;
-
-//    @BindView(R.id.loadingLabel) TextView loadingLabel;
 
     @BindView(R.id.imageProgressBar) ProgressBar progressBar;
 
@@ -116,13 +113,13 @@ public class ImageActivity extends GenericActivity {
 
         Glide
                 .with(this)
-                .load(image.getImageUrl())
+                .load(image.getUrl())
                 .fitCenter().dontAnimate()
                 .placeholder(mImageView.getDrawable())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        showToast("Error loading image.");
+                        showToast("Error loading image....");
                         return true;
                     }
 
