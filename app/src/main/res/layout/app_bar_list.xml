@@ -30,6 +30,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_search_black_24dp"
         android:layout_gravity="bottom|end"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_behavior="moe.mal.waifus.activity.ScrollAwareFABBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>
