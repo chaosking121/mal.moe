@@ -2,6 +2,7 @@ package moe.mal.waifus.activity;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindDrawable;
@@ -22,6 +23,19 @@ public class FaveActivity extends ListActivity {
     @BindDrawable(R.drawable.ic_close_black_24dp) Drawable entryIcon;
 
     @Override
+    protected void loadWaifus() {
+        swipeContainer.setRefreshing(true);
+        List<Waifu> existingWaifus = Ougi.getInstance().getFaveWaifusList();
+        if (existingWaifus != null) {
+            waifus.addAll(existingWaifus);
+            adapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(false);
+        } else {
+            refreshWaifus();
+        }
+    }
+
+    @Override
     protected void refreshWaifus() {
         Call<List<Waifu>> call = Ougi.getInstance().getWaifuAPI().getWaifuList(Ougi.getInstance().getUser().getUsername(),
                 Ougi.getInstance().getUser().getAuth());
@@ -29,8 +43,11 @@ public class FaveActivity extends ListActivity {
         call.enqueue(new Callback<List<Waifu>>() {
             @Override
             public void onResponse(Call<List<Waifu>> call, Response<List<Waifu>> response) {
+                List<Waifu> newWaifus = response.body();
+                Collections.sort(newWaifus);
+                Ougi.getInstance().setFaveWaifusList(newWaifus);
                 waifus.clear();
-                waifus.addAll(response.body());
+                waifus.addAll(newWaifus);
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
             }

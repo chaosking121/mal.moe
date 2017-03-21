@@ -48,7 +48,7 @@ public abstract class ListActivity extends SidebarActivity {
                 showSearchPrompt();
             }
         });
-        refreshWaifus();
+        loadWaifus();
     }
 
     /**
@@ -56,6 +56,13 @@ public abstract class ListActivity extends SidebarActivity {
      * @param waifu the waifu that long pressed
      */
     protected abstract void handleListAction(String waifu);
+
+    /**
+     * Method that loads waifus upon initial creation
+     */
+    protected void loadWaifus() {
+        refreshWaifus();
+    }
 
     /**
      * Method that refreshes the waifus from the backend and updates the view

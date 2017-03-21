@@ -1,8 +1,10 @@
 package moe.mal.waifus;
 
 import java.io.IOException;
+import java.util.List;
 
 import moe.mal.waifus.model.User;
+import moe.mal.waifus.model.Waifu;
 import moe.mal.waifus.network.WaifuAPI;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -20,6 +22,8 @@ public class Ougi {
     private User user;
     private WaifuAPI waifuAPI;
     private String fcmToken;
+    private List<Waifu> allWaifusList;
+    private List<Waifu> faveWaifusList;
 
     private Ougi() {
     }
@@ -46,6 +50,22 @@ public class Ougi {
 
     public WaifuAPI getWaifuAPI() {
         return waifuAPI;
+    }
+
+    public void setAllWaifusList(List<Waifu> allWaifusList) {
+        this.allWaifusList = allWaifusList;
+    }
+
+    public List<Waifu> getAllWaifusList() {
+        return allWaifusList;
+    }
+
+    public void setFaveWaifusList(List<Waifu> faveWaifusList) {
+        this.faveWaifusList = faveWaifusList;
+    }
+
+    public List<Waifu> getFaveWaifusList() {
+        return faveWaifusList;
     }
 
     public void setFCMToken(String token) {
