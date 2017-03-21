@@ -1,10 +1,13 @@
 package moe.mal.waifus.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -20,6 +23,8 @@ public abstract class GenericActivity extends AppCompatActivity {
 
     protected final Activity a = this;
     protected final Context c = this;
+
+    protected ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,4 +148,24 @@ public abstract class GenericActivity extends AppCompatActivity {
         return Pattern.compile(regex).matcher(text).matches();
     }
 
+
+    /**
+     * Private helper method to show a progress dialog
+     * @param message the message to be displayed
+     */
+    protected void showProgress(String message) {
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Please Wait");
+        progress.setMessage(message);
+        progress.setCancelable(true);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+    }
 }

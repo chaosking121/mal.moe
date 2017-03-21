@@ -47,6 +47,13 @@ public class ScrapeActivity extends GenericActivity {
 
         if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.ADMIN.getValue()) {
             newWaifuButton.setVisibility(View.INVISIBLE);
+        } else {
+            newWaifuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showScreen(NewWaifuActivity.class);
+                }
+            });
         }
 
         if (!intent.hasExtra("url")) {
@@ -57,7 +64,6 @@ public class ScrapeActivity extends GenericActivity {
 
                 if (item.getText() != null) {
                     urlField.setText(item.getText());
-                    urlField.setFocusable(false);
                 }
             }
         } else {
@@ -65,6 +71,26 @@ public class ScrapeActivity extends GenericActivity {
             urlField.setText(url);
             urlField.setFocusable(false);
         }
+
+        scrapeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                url = urlField.getText().toString();
+                waifu = (String) waifuSpinner.getSelectedItem();
+                if (!verifyGenericInput(url)) {
+                    showToast("Invalid URL Entered");
+                    return;
+                }
+                attemptToScrape(waifu, url);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Intent intent = getIntent();
 
         if (intent.hasExtra("waifu")) {
             waifu = ((String) intent.getExtras().get("waifu"));
@@ -94,19 +120,6 @@ public class ScrapeActivity extends GenericActivity {
                 }
             });
         }
-
-        scrapeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                url = urlField.getText().toString();
-                waifu = (String) waifuSpinner.getSelectedItem();
-                if (!verifyGenericInput(url)) {
-                    showToast("Invalid URL Entered");
-                    return;
-                }
-                attemptToScrape(waifu, url);
-            }
-        });
     }
 
     private void handleScrapeResponse(Response<ResponseBody> response) {

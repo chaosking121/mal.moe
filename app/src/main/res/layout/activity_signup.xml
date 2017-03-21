@@ -22,7 +22,7 @@
             <EditText android:id="@+id/usernameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textWebEmailAddress"
+                android:inputType="text|textEmailAddress"
                 android:hint="@string/username" />
         </android.support.design.widget.TextInputLayout>
 

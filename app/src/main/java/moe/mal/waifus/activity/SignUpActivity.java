@@ -39,8 +39,6 @@ public class SignUpActivity extends AuthActivity {
     private String email;
     private String password;
 
-    private ProgressDialog progress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,25 +164,4 @@ public class SignUpActivity extends AuthActivity {
             }
         });
     }
-
-    /**
-     * Private helper method to show a progress dialog
-     * @param message the message to be displayed
-     */
-    private void showProgress(String message) {
-
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-
-        progress = new ProgressDialog(this);
-        progress.setTitle("Please Wait");
-        progress.setMessage(message);
-        progress.setCancelable(true);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.show();
-    }
-
 }

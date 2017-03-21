@@ -1,17 +1,17 @@
 package moe.mal.waifus.model;
 
 /**
- * Authorization Level Enum
+ * Enum representing the different types of waifus
  * Created by Arshad on 21/03/2017.
  */
 
-public enum AuthLevel {
-    USER(1, "User"), WEEB(2, "Weeb"), MOD(3, "Mod"), ADMIN(4, "Admin"), ARSHAD(5, "Arshad");
+public enum WaifuType {
+    GENERIC(1, "Generic"), CHARACTER(2, "Character"), SHIP(3, "Ship"), SERIES(4, "Series"), PERSON(5, "Person");
 
     private int value;
     private String repr;
 
-    AuthLevel(int value, String repr) {
+    WaifuType(int value, String repr) {
         this.value = value;
         this.repr = repr;
     }
@@ -24,4 +24,5 @@ public enum AuthLevel {
     public String toString() {
         return repr;
     }
+
 }

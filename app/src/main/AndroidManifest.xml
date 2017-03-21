@@ -30,9 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
         <activity
@@ -78,7 +80,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.ScrapeActivity"></activity>
+        <activity android:name=".activity.ScrapeActivity" />
+        <activity android:name=".activity.NewWaifuActivity"></activity>
     </application>
 
 </manifest>

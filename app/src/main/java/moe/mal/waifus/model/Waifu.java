@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Waifu implements Comparable<Waifu> {
 
+    public static final String WAIFU_NAME_REGEX = "[a-z0-9_]+";
+
     @SerializedName("series")
     @Expose
     private String series;

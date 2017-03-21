@@ -59,6 +59,11 @@ public interface WaifuAPI {
     Call<User> signUp(@Field("username") String username, @Field("email") String email, @Field("password") String password);
 
     @Headers("User-Agent: Android/Mal.moe")
+    @FormUrlEncoded
+    @POST("waifu/{waifu}/create")
+    Call<Waifu> createNewWaifu(@Path("waifu") String waifu, @Field("series") String series, @Field("message") String message, @Field("waifu_type") int waifuTypeValue, @Field("min_auth_level") int minAuthLevel, @Header("Authorization") String authorization);
+
+    @Headers("User-Agent: Android/Mal.moe")
     @GET("users/user/{username}")
     Call<User> getUserInfo(@Path("username") String username, @Header("Authorization") String authorization);
 
