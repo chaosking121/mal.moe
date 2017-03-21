@@ -10,6 +10,9 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 
 import moe.mal.waifus.R;
 
@@ -34,6 +37,22 @@ public class AboutActivity extends MaterialAboutActivity {
         } catch (PackageManager.NameNotFoundException e) {
             //lol
         }
+
+        appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
+                .text("Check for updates.")
+                .icon(R.drawable.ic_update_black_24dp)
+                .setOnClickListener(new MaterialAboutActionItem.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        new AppUpdater(AboutActivity.this)
+                                .setUpdateFrom(UpdateFrom.JSON)
+                                .setUpdateJSON("https://arshbox.xyz/dist/update-changelog.json")
+                                .setDisplay(Display.SNACKBAR)
+                                .showAppUpdated(true)
+                                .start();
+                    }
+                })
+                .build());
 
         MaterialAboutCard.Builder authorCardBuilder = new MaterialAboutCard.Builder();
         authorCardBuilder.title("Author");

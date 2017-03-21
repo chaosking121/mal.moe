@@ -1,12 +1,16 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     signingConfigs {
         config {
-            keyAlias 'android'
-            keyPassword 'thegreat'
-            storeFile file('S:/Cloud/Google Drive/Backups/android.jks')
-            storePassword 'thegreat'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     compileSdkVersion 25
@@ -16,7 +20,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 25
         versionCode 3
-        versionName '3.0.1'
+        versionName '3.0.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,11 +41,11 @@ dependencies {
     })
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
@@ -55,6 +59,7 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.daniel-stoneuk:material-about-library:1.7.1'
+    compile 'com.github.javiersantos:AppUpdater:2.5.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
