@@ -26,7 +26,7 @@ public class AboutActivity extends MaterialAboutActivity {
         appCardBuilder.title("About");
         appCardBuilder.addItem(new MaterialAboutTitleItem.Builder()
                 .text("Mal.moe")
-                .icon(R.mipmap.icon)
+                .icon(R.mipmap.icon_small)
                 .build());
 
         try {
