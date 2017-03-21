@@ -12,18 +12,13 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.IOException;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 import moe.mal.waifus.model.User;
 import moe.mal.waifus.network.WaifuAPI;
-import moe.mal.waifus.service.FirebaseIDService;
-import moe.mal.waifus.service.MyFirebaseMessagingService;
-import okhttp3.ResponseBody;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
