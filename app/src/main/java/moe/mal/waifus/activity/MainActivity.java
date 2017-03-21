@@ -50,6 +50,12 @@ public class MainActivity extends AuthActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WaifuAPI.class));
+
+        Intent intent = getIntent();
+
+        if ((intent.getType() != null) && (intent.getType().equals("text/plain"))) {
+            Ougi.getInstance().setScrapingURL((String) intent.getExtras().get(Intent.EXTRA_TEXT));
+        }
     }
 
     @Override
@@ -186,7 +192,11 @@ public class MainActivity extends AuthActivity {
 
         Ougi.getInstance().setFCMToken(FirebaseInstanceId.getInstance().getToken());
 
-        moveApp(SadActivity.class);
+        if (Ougi.getInstance().needToScrape()) {
+            moveApp(ScrapeActivity.class, "url", Ougi.getInstance().popScrapingURL());
+        } else {
+            moveApp(SadActivity.class);
+        }
     }
 
     /**

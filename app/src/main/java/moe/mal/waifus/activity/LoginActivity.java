@@ -129,7 +129,12 @@ public class LoginActivity extends AuthActivity {
                     }
                 });
         progress.dismiss();
-        moveApp(SadActivity.class);
+
+        if (Ougi.getInstance().needToScrape()) {
+            moveApp(ScrapeActivity.class, "url", Ougi.getInstance().popScrapingURL());
+        } else {
+            moveApp(SadActivity.class);
+        }
     }
 
     /**

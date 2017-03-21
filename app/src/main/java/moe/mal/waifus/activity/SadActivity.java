@@ -3,6 +3,7 @@ package moe.mal.waifus.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
 
 public class SadActivity extends SidebarActivity {
@@ -11,7 +12,6 @@ public class SadActivity extends SidebarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sad);
-
         super.setUpSidebar();
     }
 

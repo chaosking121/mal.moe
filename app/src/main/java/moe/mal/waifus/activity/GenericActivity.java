@@ -48,6 +48,31 @@ public abstract class GenericActivity extends AppCompatActivity {
     }
 
     /**
+     * This method displays a new view same as showScreen, but prevents getting back to this screen.
+     * @param cls
+     */
+    protected void moveApp(Class cls) {
+        Intent in = new Intent(c, cls);
+        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(in);
+        this.finish();
+    }
+
+    /**
+     * This method displays a new view same as showScreen, but prevents getting back to this screen.
+     * @param cls
+     * @param arg_key the key of an argument to be passed along to the new activity
+     * @param arg_value the value of an argument to be passed along to the new activity
+     */
+    protected void moveApp(Class cls, String arg_key, String arg_value) {
+        Intent in = new Intent(c, cls);
+        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        in.putExtra(arg_key, arg_value);
+        startActivity(in);
+        this.finish();
+    }
+
+    /**
      * Helper method to show a short toast
      * @param message the message to be shown in the toast
      */
@@ -67,13 +92,12 @@ public abstract class GenericActivity extends AppCompatActivity {
     }
 
     /**
-     * This method displays a new view same as showScreen, but prevents getting back to this screen.
-     * @param cls
+     * Verify that user input is of the appropriate legnth
+     * @param text the user input to be verified
+     * @return true if the text is not empty and is not too long
      */
-    protected void moveApp(Class cls) {
-        Intent in = new Intent(c, cls);
-        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(in);
-        this.finish();
+    protected boolean verifyGenericInput(String text) {
+        return !((text.isEmpty()) || (text.length() > 500));
     }
+
 }

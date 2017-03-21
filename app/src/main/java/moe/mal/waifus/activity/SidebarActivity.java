@@ -84,94 +84,6 @@ public abstract class SidebarActivity extends AuthActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void handleScrapeResponse(Response<ResponseBody> response) {
-        try {
-            String res = response.body().string();
-            if ((response == null) || (response.code() != 200) || res.isEmpty()) {
-                showToast("Scraping failed.");
-            } else {
-                showToast(res);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showToast("Scraping failed.");
-        }
-    }
-
-    private void attemptToScrape(String waifu, String url) {
-
-        Call<ResponseBody> call = Ougi.getInstance().getWaifuAPI()
-                .scrape(waifu, url,
-                        Ougi.getInstance().getUser().getAuth());
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                handleScrapeResponse(response);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                handleScrapeResponse(null);
-            }
-        });
-    }
-
-    protected void showScrapePrompt() {
-        showScrapePrompt(null);
-    }
-
-    /**
-     * Displays a prompt asking the user to specify a waifu to view
-     */
-    protected void showScrapePrompt(String waifu) {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_scrape, null);
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
-        alertDialogBuilderUserInput.setView(mView);
-
-        final EditText waifuField = (EditText) mView.findViewById(R.id.waifuField);
-        final EditText urlField = (EditText) mView.findViewById(R.id.urlField);
-
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
-        if (clipboard.hasPrimaryClip()) {
-            ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-
-            if (item.getText() != null) {
-                urlField.setText(item.getText());
-            }
-        }
-
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-                        if ((!verifyPromptText(waifuField.getText().toString()))
-                        || !verifyPromptText(urlField.getText().toString())) {
-                            showToast("Invalid input.");
-                            return;
-                        }
-                        attemptToScrape(waifuField.getText().toString(),urlField.getText().toString());
-                    }
-                })
-
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-
-        if (waifu != null) {
-            waifuField.setText(waifu);
-            waifuField.setFocusable(false);
-            urlField.requestFocus();
-        }
-
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        alertDialogAndroid.show();
-    }
     /**
      * Displays a prompt asking the user to specify a waifu to view
      */
@@ -186,7 +98,7 @@ public abstract class SidebarActivity extends AuthActivity
                 .setCancelable(false)
                 .setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
-                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
+                        if (!verifyGenericInput(userInputDialogEditText.getText().toString())) {
                             showToast("Invalid input.");
                             return;
                         }
@@ -219,7 +131,7 @@ public abstract class SidebarActivity extends AuthActivity
                 .setCancelable(false)
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
-                        if (!verifyPromptText(userInputDialogEditText.getText().toString())) {
+                        if (!verifyGenericInput(userInputDialogEditText.getText().toString())) {
                             showToast("Invalid input.");
                             return;
                         }
@@ -279,10 +191,6 @@ public abstract class SidebarActivity extends AuthActivity
         showToast(String.format("Promoted successfully to level %d.", user.getAuthLevel()));
     }
 
-    private boolean verifyPromptText(String text) {
-        return !((text.isEmpty()) || (text.length() > 300));
-    }
-
     /**
      * Logs the user out and displays the login screen
      */
@@ -318,7 +226,7 @@ public abstract class SidebarActivity extends AuthActivity
             showSearchPrompt();
         } else if (id == R.id.scrape) {
             drawer.closeDrawer(GravityCompat.START);
-            showScrapePrompt();
+            showScreen(ScrapeActivity.class);
         } else if (id == R.id.promote) {
             drawer.closeDrawer(GravityCompat.START);
             showPromotionPrompt();

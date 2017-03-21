@@ -82,7 +82,7 @@ public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> 
                             ((ListActivity) c).handleListAction(waifu.getName());
                             break;
                         case R.id.scrape_waifu:
-                            ((ListActivity) c).showScrapePrompt(waifu.getName());
+                            ((ListActivity) c).showScreen(ScrapeActivity.class, "waifu", waifu.getName());
                             break;
                         case R.id.delete_waifu:
                             ((GenericActivity) c).showToast("Coming soon.");

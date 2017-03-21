@@ -32,6 +32,10 @@ public interface WaifuAPI {
     Call<List<Waifu>> getAllWaifus(@Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
+    @GET("all/names")
+    Call<List<String>> getAllWaifuNames(@Header("Authorization") String authorization);
+
+    @Headers("User-Agent: Android/Mal.moe")
     @GET("lists/{listName}")
     Call<List<Waifu>> getWaifuList(@Path("listName") String listName, @Header("Authorization") String authorization);
 

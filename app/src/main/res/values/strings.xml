@@ -52,5 +52,7 @@
     <string name="scrape_prompt">Enter Waifu and Source</string>
     <string name="scrape_image">Scrape Image</string>
     <string name="delete_waifu">Delete Waifu</string>
+    <string name="waifu_selection_prompt">Select A Waifu</string>
+    <string name="add_new_waifu">Add New Waifu</string>
 
 </resources>

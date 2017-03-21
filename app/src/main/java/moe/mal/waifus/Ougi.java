@@ -22,6 +22,7 @@ public class Ougi {
     private User user;
     private WaifuAPI waifuAPI;
     private String fcmToken;
+    private String scrapingURL;
     private List<Waifu> allWaifusList;
     private List<Waifu> faveWaifusList;
 
@@ -52,6 +53,24 @@ public class Ougi {
         return waifuAPI;
     }
 
+    // Scraping Stuff
+
+    public void setScrapingURL(String url) {
+        this.scrapingURL = url;
+    }
+
+    public boolean needToScrape() {
+        return (scrapingURL != null);
+    }
+
+    public String popScrapingURL() {
+        String temp = scrapingURL;
+        scrapingURL = null;
+        return temp;
+    }
+
+    // List Stuff
+
     public void setAllWaifusList(List<Waifu> allWaifusList) {
         this.allWaifusList = allWaifusList;
     }
@@ -67,6 +86,8 @@ public class Ougi {
     public List<Waifu> getFaveWaifusList() {
         return faveWaifusList;
     }
+
+    // FCM Stuff
 
     public void setFCMToken(String token) {
         this.fcmToken = token;
