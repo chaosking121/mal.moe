@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Abstract Activity intended to be extended by other concrete activities.
  * Created by Arshad on 03/12/2016.
@@ -48,6 +52,20 @@ public abstract class GenericActivity extends AppCompatActivity {
     }
 
     /**
+     * Switch to another activity
+     * @param cls The class of the activity to be displayed
+     * @param args a mapping of labels to values to be passed in as extras
+     */
+    protected void showScreen(Class cls, Map<String, String> args) {
+        Intent in = new Intent(c, cls);
+        in.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        for(String key : args.keySet()) {
+            in.putExtra(key, args.get(key));
+        }
+        startActivity(in);
+    }
+
+    /**
      * This method displays a new view same as showScreen, but prevents getting back to this screen.
      * @param cls
      */
@@ -73,6 +91,21 @@ public abstract class GenericActivity extends AppCompatActivity {
     }
 
     /**
+     * This method displays a new view same as showScreen, but prevents getting back to this screen.
+     * @param cls The class of the activity to be displayed
+     * @param args a mapping of labels to values to be passed in as extras
+     */
+    protected void moveApp(Class cls, Map<String, String> args) {
+        Intent in = new Intent(c, cls);
+        in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        in.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        for(String key : args.keySet()) {
+            in.putExtra(key, args.get(key));
+        }
+        startActivity(in);
+    }
+
+    /**
      * Helper method to show a short toast
      * @param message the message to be shown in the toast
      */
@@ -92,12 +125,22 @@ public abstract class GenericActivity extends AppCompatActivity {
     }
 
     /**
-     * Verify that user input is of the appropriate legnth
+     * Verify that user input is of the appropriate length
      * @param text the user input to be verified
      * @return true if the text is not empty and is not too long
      */
     protected boolean verifyGenericInput(String text) {
         return !((text.isEmpty()) || (text.length() > 500));
+    }
+
+    /**
+     * Verify that user input matches the given regular expression
+     * @param text the user input to be verified
+     * @param regex the regular expression to match against
+     * @return true if the text matches the expression
+     */
+    protected boolean verifyInputWithRegex(String text, String regex) {
+        return Pattern.compile(regex).matcher(text).matches();
     }
 
 }

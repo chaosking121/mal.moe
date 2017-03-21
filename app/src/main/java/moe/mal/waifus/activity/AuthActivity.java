@@ -15,6 +15,9 @@ public abstract class AuthActivity extends GenericActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    protected static String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$";
+    protected static String USERNAME_REGEX = "[A-Za-z0-9_]+";
+
     protected GoogleApiClient mCredentialsApiClient;
 
     @Override

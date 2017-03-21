@@ -13,9 +13,6 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.api.ResolvingResultCallbacks;
 import com.google.android.gms.common.api.Status;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import moe.mal.waifus.Ougi;
@@ -25,16 +22,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AuthActivity {
+/**
+ * Created by Arshad on 21/03/2017.
+ */
+
+public class SignUpActivity extends AuthActivity {
 
     private static final int RC_SAVE = 1;
 
     @BindView(R.id.usernameField) EditText usernameField;
+    @BindView(R.id.emailField) EditText emailField;
     @BindView(R.id.passwordField) EditText passwordField;
-    @BindView(R.id.loginButton) Button loginButton;
     @BindView(R.id.signUpButton) Button signUpButton;
 
     private String username;
+    private String email;
     private String password;
 
     private ProgressDialog progress;
@@ -42,23 +44,9 @@ public class LoginActivity extends AuthActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);
-
-        if (Ougi.getInstance().getUser().isLoggedIn()) {
-            usernameField.setText(Ougi.getInstance().getUser().getUsername());
-            passwordField.setText(Ougi.getInstance().getUser().getPassword());
-        }
-
-        loginButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loginPressed();
-                    }
-                }
-        );
 
         signUpButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -73,15 +61,10 @@ public class LoginActivity extends AuthActivity {
     /**
      * Helper method that takes a response and parses it
      * @param response the Response instance that is generated from the API call
-     * @param login true if the call was made from login, false if from sign up
      */
-    private void handleServerResponse(Response<User> response, boolean login) {
+    private void handleServerResponse(Response<User> response) {
         if ((response == null) || (response.code() != 200)) {
-            if (login) {
-                showToast("Those credentials weren't correct.");
-            } else {
-                showToast("Sign up failed. Are you already registered?");
-            }
+            showToast("Sign up failed. Are you already registered?");
             progress.dismiss();
             return;
         }
@@ -135,6 +118,14 @@ public class LoginActivity extends AuthActivity {
             passwordField.setError(null);
         }
 
+        if (!(verifyGenericInput(email) && verifyInputWithRegex(email, EMAIL_REGEX))) {
+            emailField.setError("enter a valid email address");
+            emailField.requestFocus();
+            valid = false;
+        } else {
+            emailField.setError(null);
+        }
+
         if (!(verifyGenericInput(username) && verifyInputWithRegex(username, USERNAME_REGEX))) {
             usernameField.setError("enter a valid username");
             usernameField.requestFocus();
@@ -146,54 +137,34 @@ public class LoginActivity extends AuthActivity {
         return valid;
     }
 
-
     /**
-     * Method to be executed when the login button is pressed
+     * Method to be executed when the sign up button is pressed
      */
-    public void loginPressed() {
+    public void signUpPressed() {
         username = usernameField.getText().toString();
+        email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
         if (!validate()) {
             return;
         }
 
-        showProgress("Trying to log you in.");
+        showProgress("Trying to sign you up.");
 
         Call<User> call = Ougi.getInstance().getWaifuAPI()
-                .getUserInfo(username, User.buildAuth(username, password));
+                .signUp(username, email, password);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                handleServerResponse(response, true);
+                handleServerResponse(response);
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                handleServerResponse(null, true);
+                handleServerResponse(null);
             }
         });
-    }
-
-    /**
-     * Method to be executed when the sign up button is pressed
-     */
-    public void signUpPressed() {
-        Map<String, String> args = new HashMap<>();
-
-        username = usernameField.getText().toString();
-        password = passwordField.getText().toString();
-
-        if (verifyGenericInput(username)) {
-            args.put("username", username);
-        }
-
-        if (verifyGenericInput(password)) {
-            args.put("password", password);
-        }
-
-        showScreen(SignUpActivity.class);
     }
 
     /**

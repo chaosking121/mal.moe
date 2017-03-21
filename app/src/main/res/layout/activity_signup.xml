@@ -29,6 +29,17 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText android:id="@+id/emailField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
             <EditText android:id="@+id/passwordField"
@@ -39,15 +50,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="12dp"
-            android:layout_weight="0.5"
-            android:text="@string/login"/>
-
-        <android.support.v7.widget.AppCompatButton
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,9 +57,9 @@
             android:layout_marginBottom="8dp"
             android:padding="12dp"
             android:layout_weight="0.5"
-            android:text="@string/sign_up_prompt"/>
+            android:text="@string/sign_up"/>
 
 
     </LinearLayout>
 
- </ScrollView>
+</ScrollView>

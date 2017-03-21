@@ -56,7 +56,7 @@ public interface WaifuAPI {
     @Headers("User-Agent: Android/Mal.moe")
     @FormUrlEncoded
     @POST("users/signup")
-    Call<User> signUp(@Field("username") String username, @Field("password") String password);
+    Call<User> signUp(@Field("username") String username, @Field("email") String email, @Field("password") String password);
 
     @Headers("User-Agent: Android/Mal.moe")
     @GET("users/user/{username}")

@@ -14,6 +14,10 @@ public class User {
     @Expose
     private String username;
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
     @SerializedName("auth_level")
     @Expose
     private Integer authLevel;
@@ -39,6 +43,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getAuthLevel() {

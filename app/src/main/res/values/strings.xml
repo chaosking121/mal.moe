@@ -35,10 +35,11 @@
     <string name="favorites_list_name">Favorites List Name</string>
     <string name="default_favorites_list_name">chaosking121</string>
     <string name="fave_prompt">The list of favorite waifus.</string>
-    <string name="sign_up_prompt">No account yet? Create one</string>
+    <string name="sign_up_prompt">Not Registered?</string>
     <string name="login">Login</string>
     <string name="password">password</string>
     <string name="username">username</string>
+    <string name="email">email</string>
     <string name="enter_promotion_code">Enter Promotion Code</string>
     <string name="promo_code">promo code</string>
     <string name="sign_up">Sign Up</string>

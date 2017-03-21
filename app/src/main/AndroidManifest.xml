@@ -57,8 +57,11 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/login"
-            android:launchMode="singleTask"
-            android:parentActivityName=".activity.SadActivity" />
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:label="@string/sign_up"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.AboutActivity"
             android:theme="@style/AppTheme.MaterialAboutActivity" />
