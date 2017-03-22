@@ -45,6 +45,10 @@ public class ScrapeActivity extends GenericActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
 
+        waifus.add("");
+        adapter = new ArrayAdapter<>(c, android.R.layout.simple_spinner_dropdown_item, waifus);
+        waifuSpinner.setAdapter(adapter);
+
         if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.ADMIN.getValue()) {
             newWaifuButton.setVisibility(View.INVISIBLE);
         } else {
@@ -94,6 +98,7 @@ public class ScrapeActivity extends GenericActivity {
 
         if (intent.hasExtra("waifu")) {
             waifu = ((String) intent.getExtras().get("waifu"));
+            waifus.clear();
             waifus.add(waifu);
             adapter = new ArrayAdapter<>(c, android.R.layout.simple_spinner_dropdown_item, waifus);
             waifuSpinner.setAdapter(adapter);
