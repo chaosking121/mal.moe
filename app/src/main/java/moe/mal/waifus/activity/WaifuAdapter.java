@@ -12,12 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
+import moe.mal.waifus.model.AuthLevel;
 import moe.mal.waifus.model.Waifu;
 
 /**
@@ -26,6 +30,8 @@ import moe.mal.waifus.model.Waifu;
  */
 
 public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> {
+
+    private static Map<String, Integer> listEntryOverflowMenuLookup;
 
     private final List<Waifu> list;
     private final Activity context;
@@ -39,6 +45,11 @@ public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            listEntryOverflowMenuLookup = new HashMap<>();
+            listEntryOverflowMenuLookup.put("Fave Action", 0);
+            listEntryOverflowMenuLookup.put("Scrape", 1);
+            listEntryOverflowMenuLookup.put("Delete", 2);
         }
     }
 
@@ -71,8 +82,22 @@ public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> 
             PopupMenu popup = new PopupMenu(c, holder.action);
             popup.inflate(R.menu.waifu_menu);
 
-            MenuItem listAction = popup.getMenu().getItem(0);
-            listAction.setTitle(((ListActivity) c).getListActionTitle());
+            if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.WEEB.getValue()) {
+                // Hide the list button button for non-mods
+                popup.getMenu().getItem(listEntryOverflowMenuLookup.get("Fave Action")).setVisible(false);
+            } else {
+                popup.getMenu().getItem(0).setTitle(((ListActivity) c).getListActionTitle());
+            }
+
+            if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.MOD.getValue()) {
+                // Hide the scrape button for non-mods
+                popup.getMenu().getItem(listEntryOverflowMenuLookup.get("Scrape")).setVisible(false);
+            }
+
+            if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.ADMIN.getValue()) {
+                // Hide the delete button for non-admins
+                popup.getMenu().getItem(listEntryOverflowMenuLookup.get("Delete")).setVisible(false);
+            }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override

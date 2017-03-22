@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,9 +23,12 @@ import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import moe.mal.waifus.Ougi;
 import moe.mal.waifus.R;
+import moe.mal.waifus.model.AuthLevel;
 import moe.mal.waifus.model.User;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,6 +42,22 @@ import retrofit2.Response;
 
 public abstract class SidebarActivity extends AuthActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static Map<String, Integer> sidebarMenuLookup;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        sidebarMenuLookup = new HashMap<>();
+        sidebarMenuLookup.put("Sad", 0);
+        sidebarMenuLookup.put("Faves", 1);
+        sidebarMenuLookup.put("All", 2);
+        sidebarMenuLookup.put("Search", 3);
+        sidebarMenuLookup.put("Scrape", 4);
+        sidebarMenuLookup.put("Enter Promo Code", 5);
+        sidebarMenuLookup.put("Log Out", 6);
+    }
 
     /**
      * Method to be called by subclasses to setup the sidebar for their activity
@@ -54,6 +74,17 @@ public abstract class SidebarActivity extends AuthActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+
+        if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.WEEB.getValue()) {
+            // Hide faves button from non-weebs or higher
+            menu.getItem(sidebarMenuLookup.get("Faves")).setVisible(false);
+        }
+
+        if (Ougi.getInstance().getUser().getAuthLevel() < AuthLevel.MOD.getValue()) {
+            // Hide scrape button from non-mods or higher
+            menu.getItem(sidebarMenuLookup.get("Scrape")).setVisible(false);
+        }
     }
 
     @Override
