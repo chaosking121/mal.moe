@@ -28,6 +28,10 @@ public interface WaifuAPI {
     Call<WaifuImage> getImage(@Path("waifu") String waifu, @Header("Authorization") String authorization);
 
     @Headers("User-Agent: Android/Mal.moe")
+    @GET("waifu/{waifu}/{imageNum}")
+    Call<WaifuImage> getSpecificImage(@Path("waifu") String waifu, @Path("imageNum") String imageNum, @Header("Authorization") String authorization);
+
+    @Headers("User-Agent: Android/Mal.moe")
     @GET("all")
     Call<List<Waifu>> getAllWaifus(@Header("Authorization") String authorization);
 

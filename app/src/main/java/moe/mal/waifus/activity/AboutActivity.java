@@ -3,6 +3,7 @@ package moe.mal.waifus.activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder;
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity;
@@ -45,8 +46,8 @@ public class AboutActivity extends MaterialAboutActivity {
                     @Override
                     public void onClick() {
                         new AppUpdater(AboutActivity.this)
-                                .setUpdateFrom(UpdateFrom.JSON)
-                                .setUpdateJSON("https://arshbox.xyz/dist/update-changelog.json")
+                                .setUpdateFrom(UpdateFrom.GITHUB)
+                                .setGitHubUserAndRepo("chaosking121", "mal.moe-android")
                                 .setDisplay(Display.SNACKBAR)
                                 .showAppUpdated(true)
                                 .start();
