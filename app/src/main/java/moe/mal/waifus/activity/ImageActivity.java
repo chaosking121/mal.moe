@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -27,16 +28,18 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 
 public class ImageActivity extends GenericActivity {
-    String waifu;
-    WaifuImage image;
+    private String waifu;
+    private String imageNum;
+    private WaifuImage image;
 
     boolean loading;
     boolean tapped;
 
     @BindView(R.id.imageProgressBar) ProgressBar progressBar;
-
     @BindView(R.id.imageView) PhotoView mImageView;
-    PhotoViewAttacher mAttacher;
+
+    private PhotoViewAttacher mAttacher;
+    private Call<WaifuImage> call;
 
     private class PhotoTapListener implements PhotoViewAttacher.OnPhotoTapListener, ImageView.OnLongClickListener {
         @Override
@@ -62,10 +65,25 @@ public class ImageActivity extends GenericActivity {
         setContentView(R.layout.activity_image);
 
         ButterKnife.bind(this);
-
         Bundle extras = getIntent().getExtras();
-        waifu = ((String) extras.get("waifu"));
-        waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
+
+        if (getIntent().hasExtra("waifu")) {
+            waifu = ((String) extras.get("waifu"));
+            waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
+        } else {
+            waifu = "lily";
+        }
+
+        if (getIntent().hasExtra("imageNum")) {
+            imageNum = (String) extras.get("imageNum");
+            call = Ougi.getInstance().getWaifuAPI()
+                    .getSpecificImage(waifu, imageNum,
+                            Ougi.getInstance().getUser().getAuth());
+        } else {
+            call = Ougi.getInstance().getWaifuAPI()
+                    .getImage(waifu,
+                            Ougi.getInstance().getUser().getAuth());
+        }
 
         progressBar.setIndeterminate(true);
 
@@ -86,11 +104,7 @@ public class ImageActivity extends GenericActivity {
 
         setLoading(true);
 
-        Call<WaifuImage> call = Ougi.getInstance().getWaifuAPI()
-                .getImage(waifu,
-                        Ougi.getInstance().getUser().getAuth());
-
-        call.enqueue(new Callback<WaifuImage>() {
+        call.clone().enqueue(new Callback<WaifuImage>() {
             @Override
             public void onResponse(Call<WaifuImage> call, Response<WaifuImage> response) {
                 handleImageResponse(response);
