@@ -111,7 +111,7 @@ public class NewWaifuActivity extends GenericActivity {
             return;
         }
 
-        showProgress("Trying to sign you up.");
+        showProgress("Trying to create that waifu.");
 
         Call<Waifu> call = Ougi.getInstance().getWaifuAPI()
                 .createNewWaifu(name, series, message, waifuType.getValue(),
