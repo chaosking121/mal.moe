@@ -28,6 +28,9 @@ public class WaifuImage {
     @SerializedName("waifu")
     @Expose
     private String waifu;
+    @SerializedName("message")
+    @Expose
+    private String message;
 
     /**
      * No args constructor for use in serialization
@@ -44,8 +47,9 @@ public class WaifuImage {
      * @param sourceUrl
      * @param waifu
      * @param url
+     * @param message
      */
-    public WaifuImage(String downloadDate, String hash, String id, String sourceUrl, String url, String waifu) {
+    public WaifuImage(String downloadDate, String hash, String id, String sourceUrl, String url, String waifu, String message) {
         super();
         this.downloadDate = downloadDate;
         this.hash = hash;
@@ -53,6 +57,7 @@ public class WaifuImage {
         this.sourceUrl = sourceUrl;
         this.url = url;
         this.waifu = waifu;
+        this.message = message;
     }
 
     public String getDownloadDate() {
@@ -101,6 +106,14 @@ public class WaifuImage {
 
     public void setWaifu(String waifu) {
         this.waifu = waifu;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
