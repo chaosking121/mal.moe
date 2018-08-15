@@ -83,7 +83,7 @@ public abstract class GenericActivity extends AppCompatActivity {
 
     /**
      * This method displays a new view same as showScreen, but prevents getting back to this screen.
-     * @param cls
+     * @param cls The class of the activity to be displayed
      * @param arg_key the key of an argument to be passed along to the new activity
      * @param arg_value the value of an argument to be passed along to the new activity
      */

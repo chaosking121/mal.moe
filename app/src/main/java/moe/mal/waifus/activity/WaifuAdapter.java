@@ -3,6 +3,7 @@ package moe.mal.waifus.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -141,6 +142,9 @@ public class WaifuAdapter extends RecyclerView.Adapter<WaifuAdapter.ViewHolder> 
         holder.name.setText(name);
         holder.count.setText(String.valueOf(list.get(position).getCount()));
         holder.action.setImageDrawable(context.getDrawable(R.drawable.ic_more_vert_black_24dp));
+
+        holder.name.setTextColor(ContextCompat.getColor(context, R.color.black));
+        holder.count.setTextColor(ContextCompat.getColor(context, R.color.black));
 
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
