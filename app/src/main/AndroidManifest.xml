@@ -20,8 +20,12 @@
 
         <!-- Activities -->
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name"
+            android:name=".activity.ImageActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SadActivity"
+            android:label="@string/sad"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,59 +33,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.ImageActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.AllActivity"
-            android:label="@string/all_waifus"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.FaveActivity"
-            android:label="@string/favorites"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.SadActivity"
-            android:label="@string/sad"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/login"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.SignUpActivity"
-            android:label="@string/sign_up"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.AboutActivity"
-            android:theme="@style/AppTheme.MaterialAboutActivity" />
-
-        <!-- Services -->
-        <service android:name=".service.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".service.FirebaseIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
-        <activity android:name=".activity.ScrapeActivity" />
-        <activity android:name=".activity.NewWaifuActivity"></activity>
     </application>
 
 </manifest>

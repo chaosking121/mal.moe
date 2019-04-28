@@ -3,57 +3,10 @@
 
     <string name="api_url_base">https://mal.moe/api/waifus/</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-    <string name="shiki_is_best_girl">Shiki is best girl~</string>
-    <string name="version">3.0.1</string>
-
-    <!-- Imported from old app -->
     <string name="want_to_be">Sad Anime Girls</string>
     <string name="don_t_want_to_be">A Cute Kitty Cat</string>
     <string name="title_activity_image">ImageActivity</string>
     <string name="loading">loading…</string>
-    <string name="lily">Lily</string>
+    <string name="lily">Lily!</string>
     <string name="sad">Sad?</string>
-    <string name="search">Search</string>
-    <string name="failed_to_load_image">I was unable to load a new image :(</string>
-    <string name="best_girl_prompt">Who\'s best girl?</string>
-    <string name="default_best_girl">shiki</string>
-    <!-- -->
-
-    <string name="title_activity_login">Sign in</string>
-    <string name="favorites">Favorites</string>
-    <string name="all_waifus">All Waifus</string>
-    <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="favorites_list_name">Favorites List Name</string>
-    <string name="default_favorites_list_name">chaosking121</string>
-    <string name="fave_prompt">The list of favorite waifus.</string>
-    <string name="sign_up_prompt">Not Registered?</string>
-    <string name="login">Login</string>
-    <string name="password">password</string>
-    <string name="username">username</string>
-    <string name="email">email</string>
-    <string name="enter_promotion_code">Enter Promotion Code</string>
-    <string name="promo_code">promo code</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="user_profile">User Profile</string>
-    <string name="log_out">Log Out</string>
-    <string name="about">About</string>
-    <string name="waiting_message">Please wait, trying to log you in now!</string>
-    <string name="url_to_scrape">url to scrape</string>
-    <string name="waifu_name">waifu name</string>
-    <string name="scrape">Scrape</string>
-    <string name="scrape_prompt">Enter Waifu and Source</string>
-    <string name="scrape_image">Scrape Image</string>
-    <string name="delete_waifu">Delete Waifu</string>
-    <string name="waifu_selection_prompt">Select A Waifu</string>
-    <string name="add_new_waifu">Add New Waifu</string>
-
 </resources>

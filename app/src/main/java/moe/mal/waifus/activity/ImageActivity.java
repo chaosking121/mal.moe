@@ -1,12 +1,14 @@
 package moe.mal.waifus.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -27,9 +29,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by Arshad on 23/10/2016.
  */
 
-public class ImageActivity extends GenericActivity {
+public class ImageActivity extends AppCompatActivity {
     private String waifu;
-    private String imageNum;
     private WaifuImage image;
 
     boolean loading;
@@ -69,21 +70,14 @@ public class ImageActivity extends GenericActivity {
 
         if (getIntent().hasExtra("waifu")) {
             waifu = ((String) extras.get("waifu"));
-            waifu = (waifu == null) ? "lily" : waifu.toLowerCase().replace(' ', '_');
+            Log.e("poop", waifu);
         } else {
-            waifu = "lily";
+            handleBadResult();
+            return;
         }
 
-        if (getIntent().hasExtra("imageNum")) {
-            imageNum = (String) extras.get("imageNum");
-            call = Ougi.getInstance().getWaifuAPI()
-                    .getSpecificImage(waifu, imageNum,
-                            Ougi.getInstance().getUser().getAuth());
-        } else {
-            call = Ougi.getInstance().getWaifuAPI()
-                    .getImage(waifu,
-                            Ougi.getInstance().getUser().getAuth());
-        }
+        call = Ougi.getInstance().getWaifuAPI()
+                .getImage(waifu);
 
         progressBar.setIndeterminate(true);
 
@@ -112,44 +106,44 @@ public class ImageActivity extends GenericActivity {
 
             @Override
             public void onFailure(Call<WaifuImage> call, Throwable t) {
-                handleImageResponse(null);
+                handleBadResult();
             }
         });
     }
 
     private void handleImageResponse(Response<WaifuImage> response) {
-        if ((response == null) || (response.body() == null)) {
-            showToast("Error loading image.");
-            return;
-        }
 
         image = response.body();
 
         Glide
-                .with(this)
-                .load(image.getUrl())
-                .fitCenter().dontAnimate()
-                .placeholder(mImageView.getDrawable())
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        showToast("Error loading image....");
-                        return true;
-                    }
+            .with(this)
+            .load(image.getUrl())
+            .fitCenter().dontAnimate()
+            .placeholder(mImageView.getDrawable())
+            .listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    handleBadResult();
+                    return true;
+                }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource,
-                                                   String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        mAttacher.update();
-                        setLoading(false);
-                        return false;
-                    }
-                })
-                .into(mImageView);
+                @Override
+                public boolean onResourceReady(GlideDrawable resource,
+                                               String model,
+                                               Target<GlideDrawable> target,
+                                               boolean isFromMemoryCache,
+                                               boolean isFirstResource) {
+                    mAttacher.update();
+                    setLoading(false);
+                    return false;
+                }
+            })
+            .into(mImageView);
         tapped = false;
+    }
+
+    private void handleBadResult() {
+        Toast.makeText(this, "Error loading image.", Toast.LENGTH_SHORT).show();
     }
 
     private void setLoading(boolean status) {
